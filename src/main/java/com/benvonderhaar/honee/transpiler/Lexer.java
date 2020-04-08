@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,7 +14,8 @@ import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
-import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
+import com.benvonderhaar.honee.transpiler.registry.TokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.statement.Statement;
 import com.benvonderhaar.honee.transpiler.symbol.Equal;
 import com.benvonderhaar.honee.transpiler.symbol.LParen;
@@ -23,12 +23,13 @@ import com.benvonderhaar.honee.transpiler.symbol.RParen;
 import com.benvonderhaar.honee.transpiler.symbol.Semicolon;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.symbol.Whitespace;
-import com.benvonderhaar.honee.transpiler.type.AnyType;
 import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.util.BooleanTokenArrayTuple;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtils.tokenIsOfType;
+import static com.benvonderhaar.honee.transpiler.util.ReducerUtil.*;
+import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
+import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class Lexer {
 
@@ -82,6 +83,7 @@ public class Lexer {
 		tokenTypes.add(Whitespace.class);
 		tokenTypes.add(UnaryOperator.class);
 		tokenTypes.add(BinaryOperator.class);
+
 	    Stack<Token> tokens = new Stack<>();
 	   
 	    boolean foundToken;
@@ -92,14 +94,19 @@ public class Lexer {
 
 			for (Class<? extends Token> tokenType : tokenTypes) {
 
-				Pattern pattern = Pattern.compile(getRegex(tokenType));
+				if (!TokenTypeRegistry.hasRegex(tokenType)) {
+					continue;
+				}
+
+				Pattern pattern = Pattern.compile(
+						TokenTypeRegistry.getTokenType(tokenType).getRegex());
 
 				Matcher matcher = pattern.matcher(line);
 
 				if (matcher.find() && !matcher.group(0).equals("")) {
 
 					if (tokenType.equals(Whitespace.class)) {
-						tokens.add(new Whitespace());
+						tokens.add(WHITESPACE);
 					} else if (tokenType.equals(LiteralExpression.class)) {
 
 						if (matcher.group(0).equals("true") || matcher.group(0).equals("false")) {
@@ -109,8 +116,11 @@ public class Lexer {
 							tokens.add(new LiteralExpression(
 									new IntegerLiteral(matcher.group(0))));
 						}
+
 					} else if (tokenType.equals(Type.class)) {
-						tokens.add(Type.getType(matcher.group(0)).newInstance());
+
+						// TODO use tokentyperegistry
+						tokens.add((Token) Type.getType(matcher.group(0)).getConstructors()[0].newInstance(""));
 					} else if (tokenType.equals(VariableExpression.class)) {
 						tokens.add(new VariableExpression(new Variable(matcher.group(0))));
 					} else {
@@ -154,12 +164,7 @@ public class Lexer {
 
 			didReduction = false;
 
-			// TODO combine checkCanReduce*, reduceTo*, and class parameters somehow
-			if (reduce(parserStack, lookahead,
-					UnaryOperatorExpression::checkCanReduceToPreUnaryOperationExpression,
-					UnaryOperatorExpression::reduceToPreUnaryOperationExpression,
-					UnaryOperatorExpression.class,
-					new UnaryOperator(""), new VariableExpression(null)).bool()) {
+			if (reduce(parserStack, lookahead, PRE_UNARY_OPERATION_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced PRE UNOP Expression");
 				System.out.println("Parser Stack: " + parserStack);
@@ -167,11 +172,7 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead,
-					UnaryOperatorExpression::checkCanReduceToPostUnaryOperationExpression,
-					UnaryOperatorExpression::reduceToPostUnaryOperationExpression,
-					UnaryOperatorExpression.class,
-					new VariableExpression(null), new UnaryOperator("")).bool()) {
+			if (reduce(parserStack, lookahead, POST_UNARY_OPERATION_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced POST UNOP Expression");
 				System.out.println("Parser Stack: " + parserStack);
@@ -179,11 +180,7 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead,
-					BinaryOperationExpression::checkCanReduceToBinaryOperationExpression,
-					BinaryOperationExpression::reduceToBinaryOperationExpression,
-					BinaryOperationExpression.class,
-					new AnyExpression(), new BinaryOperator(""), new AnyExpression()).bool()) {
+			if (reduce(parserStack, lookahead, BINARY_OPERATION_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced BINOP Expression");
 				System.out.println("Parser Stack: " + parserStack);
@@ -191,11 +188,7 @@ public class Lexer {
 				continue;
 			}
 			
-			if (reduce(parserStack, lookahead,
-					ParenthesisExpression::checkCanReduceToParenthesisExpression,
-					ParenthesisExpression::reduceToParenthesisExpression,
-					ParenthesisExpression.class,
-					new LParen(""), new AnyExpression(), new RParen("")).bool()) {
+			if (reduce(parserStack, lookahead, PARENTHESIS_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced Parenthesis");
 				System.out.println("Parser Stack: " + parserStack);
@@ -203,11 +196,7 @@ public class Lexer {
 				continue;
 			}
 			
-			if (reduce(parserStack, lookahead,
-					BinaryOperator::checkCanReduceTwoEqualsToDoubleEquals,
-					BinaryOperator::reduceTwoEqualsToDoubleEquals,
-					BinaryOperator.class,
-					new Equal(""), new Equal("")).bool()) {
+			if (reduce(parserStack, lookahead, TWO_EQUALS_TO_DOUBLE_EQUALS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced BINOP ==");
 				System.out.println("Parser Stack: " + parserStack);
@@ -216,11 +205,7 @@ public class Lexer {
 			}
 
 			// [-, _, -] -> [+]
-			if (reduce(parserStack, lookahead,
-					BinaryOperator::checkCanReduceMinusSpaceMinusToPlus,
-					BinaryOperator::reduceMinusSpaceMinusToPlus,
-					BinaryOperator.class,
-					new BinaryOperator("-"), new Whitespace(), new BinaryOperator("-")).bool()) {
+			if (reduce(parserStack, lookahead, MINUS_SPACE_MINUS_TO_PLUS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced - - -> +");
 				System.out.println("Parser Stack: " + parserStack);
@@ -240,11 +225,7 @@ public class Lexer {
 		System.out.println(parserStack);
 		
 		// Parse assignment
-		reduce(parserStack, lookahead,
-				AssignmentStatement::checkCanReduceToAssignmentStatement,
-				AssignmentStatement::reduceToAssignmentStatement,
-				AssignmentStatement.class,
-				new AnyType(), new VariableExpression(null), new Equal(""), new AnyExpression());
+		reduce(parserStack, lookahead, ASSIGNMENT_STATEMENT_REDUCER);
 
 		System.out.println(parserStack);
 
@@ -273,19 +254,17 @@ public class Lexer {
 	 *
 	 * @param stack
 	 * @param lookahead
-	 * @param tokenReducer
-	 * @param tokenTypes
 	 * @return
 	 * @throws Exception
 	 */
 	private static BooleanTokenArrayTuple reduce(
 			List<Token> stack,
 			Token lookahead,
-			Function<Token[], Boolean> tokenTypeChecker,
-			Function<Token[], Token> tokenReducer,
-			Class reducerOutputType,
-			Token... tokenTypes) throws HoneeException {
-		
+			Reducer reducer) throws HoneeException {
+
+		Token[] tokenTypes = reducer.getInputTokenTypes();
+		Class<? extends Token> outputClass = reducer.getOutputClass();
+
 		for (int i = 0; i <= stack.size() - tokenTypes.length; i++) {
 
 			if (tokenTypes[0].getClass().isAssignableFrom(stack.get(i).getClass())) {
@@ -306,7 +285,7 @@ public class Lexer {
 				}
 				
 				// Operator priority
-				if (reducerOutputType.equals(BinaryOperationExpression.class)
+				if (outputClass.equals(BinaryOperationExpression.class)
 					&& !BinaryOperationExpression.satisfiesOperatorPriorityRules(stack, lookahead, i)) {
 					continue;
 				}
@@ -323,8 +302,8 @@ public class Lexer {
 
 				Token[] matchedTokensArray = matchedTokens.toArray(new Token[0]);
 
-				if (tokenTypeChecker.apply(matchedTokensArray)) {
-					stack.add(i, tokenReducer.apply(matchedTokensArray));
+				if (reducer.check(matchedTokensArray)) {
+					stack.add(i, reducer.reduce(matchedTokensArray));
 				}
 
 				return new BooleanTokenArrayTuple(true, matchedTokens);
@@ -334,41 +313,5 @@ public class Lexer {
 		
 		return new BooleanTokenArrayTuple(false, null);
 	}
-	
-	private static String getRegex(Class<? extends Token> clazz) throws HoneeException {
-		
-		if (clazz.getName().equals(LiteralExpression.class.getName())) {
-			return "^\\d+(\\.\\d+)?|(true|false)?";// TODO Strings
-		}
-		else if (clazz.getName().equals(Type.class.getName())) {
-			return "^integer|boolean";
-		}
-		else if (clazz.getName().equals(LParen.class.getName())) {
-			return "^\\(";
-		}
-		else if (clazz.getName().equals(RParen.class.getName())) {
-			return "^\\)";
-		}
-		else if (clazz.getName().equals(Semicolon.class.getName())) {
-			return "^;";
-		}
-		else if (clazz.getName().equals(Equal.class.getName())) {
-			return "^\\=";
-		}
-		else if (clazz.getName().equals(BinaryOperator.class.getName())) {
-			return "^[\\+\\-\\*\\/]?(==)?";
-		}
-		else if (clazz.getName().equals(UnaryOperator.class.getName())) {
-			return "^(\\-\\-)|(\\+\\+)";
-		}
-		else if (clazz.getName().equals(Whitespace.class.getName())) {
-			return "^(\\s)+";
-		}
-		else if (clazz.getName().equals(VariableExpression.class.getName())) {
-			return "^[a-zA-Z]+[a-zA-Z0-9]?";
-		}
-		else {
-			throw new HoneeException("Cannot parse next token");
-		}
-	}
+
 }

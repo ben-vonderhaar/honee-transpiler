@@ -11,11 +11,7 @@ public class BooleanLiteral extends Literal {
 	public Boolean get() {
 		return Boolean.parseBoolean(this.bool);
 	}
-	
-	public String getRegex() {
-		return "";
-	}
-	
+
 	@Override
 	public String toString() {
 		return bool;

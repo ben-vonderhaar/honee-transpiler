@@ -5,7 +5,11 @@ import com.benvonderhaar.honee.transpiler.literal.Literal;
 public class LiteralExpression extends Expression {
 
 	private Literal literal;
-	
+
+	public LiteralExpression(String literalExpression) {
+
+	}
+
 	public LiteralExpression(Literal literal) {
 		this.literal = literal;
 	}
@@ -13,6 +17,11 @@ public class LiteralExpression extends Expression {
 	@Override
 	public Literal evaluate() {
 		return this.literal;
+	}
+
+	@Override
+	public String getRegex() {
+		return "^\\d+(\\.\\d+)?|(true|false)?"; // TODO Strings
 	}
 
 	@Override

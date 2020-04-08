@@ -7,6 +7,11 @@ public class Equal extends Symbol {
 	}
 
 	@Override
+	public String getRegex() {
+		return "^\\=";
+	}
+
+	@Override
 	public String toString() {
 		return "=";
 	}

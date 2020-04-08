@@ -2,7 +2,11 @@ package com.benvonderhaar.honee.transpiler.type;
 
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public abstract class Type extends AnyType {
+public class Type extends AnyType {
+
+	public Type(String type) {
+
+	}
 
 	public static Class<? extends Type> getType(String type) throws HoneeException {
 		if (type.equals("integer")) {
@@ -12,6 +16,11 @@ public abstract class Type extends AnyType {
 		} else {
 			throw new HoneeException("Unrecognized type: " + type);
 		}
+	}
+
+	@Override
+	public String getRegex() {
+		return "^integer|boolean";
 	}
 	
 }

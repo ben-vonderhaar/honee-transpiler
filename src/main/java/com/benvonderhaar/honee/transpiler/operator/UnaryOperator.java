@@ -1,7 +1,6 @@
 package com.benvonderhaar.honee.transpiler.operator;
 
 import com.benvonderhaar.honee.transpiler.expression.Expression;
-import com.benvonderhaar.honee.transpiler.expression.UnaryOperatorExpression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
@@ -46,5 +45,10 @@ public class UnaryOperator extends Operator {
     @Override
     public Literal evaluate(Expression... arguments) {
         return this.operation.apply(arguments[0]).evaluate();
+    }
+
+    @Override
+    public String getRegex() {
+        return "^(\\-\\-)|(\\+\\+)";
     }
 }

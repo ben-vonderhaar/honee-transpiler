@@ -6,7 +6,7 @@ import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
 
 import java.util.List;
 
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtils.tokenIsOfType;
+import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class BinaryOperationExpression extends Expression {
 
@@ -23,24 +23,11 @@ public class BinaryOperationExpression extends Expression {
 	public Literal evaluate() {
 		return this.op.evaluate(lhs, rhs);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + lhs.toString() + op.toString() + rhs.toString() + ")";
 	}
-
-	public static Boolean checkCanReduceToBinaryOperationExpression(Token[] tokens) {
-		return tokenIsOfType(tokens[0], Expression.class)
-				&& tokenIsOfType(tokens[1], BinaryOperator.class)
-				&& tokenIsOfType(tokens[2], Expression.class);
-	}
-
-    public static Token reduceToBinaryOperationExpression(Token[] tokens) {
-		return new BinaryOperationExpression(
-				(Expression) tokens[0],
-				(BinaryOperator) tokens[1],
-				(Expression) tokens[2]);
-    }
 
     public static Boolean satisfiesOperatorPriorityRules(List<Token> stack, Token lookahead, int stackPosition) {
 

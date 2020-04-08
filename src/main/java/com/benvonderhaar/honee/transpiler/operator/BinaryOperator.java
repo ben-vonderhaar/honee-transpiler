@@ -67,27 +67,11 @@ public class BinaryOperator extends Operator {
 		
 	}
 
-	public static Boolean checkCanReduceMinusSpaceMinusToPlus(Token[] tokens) {
-		return tokens.length == 3
-				&& BinaryOperator.class.equals(tokens[0].getClass()) && tokens[0].toString().equals("-")
-				&& Whitespace.class.equals(tokens[1].getClass())
-				&& BinaryOperator.class.equals(tokens[2].getClass()) && tokens[2].toString().equals("-");
+	@Override
+	public String getRegex() {
+		return "^[\\+\\-\\*\\/]?(==)?";
 	}
 
-
-	public static Token reduceMinusSpaceMinusToPlus(Token[] tokens) {
-		return new BinaryOperator("+");
-
-	}
-
-	public static Boolean checkCanReduceTwoEqualsToDoubleEquals(Token[] tokens) {
-		return tokens.length == 2 && Equal.class.equals(tokens[0].getClass()) && Equal.class.equals(tokens[1].getClass());
-	}
-
-	public static Token reduceTwoEqualsToDoubleEquals(Token[] tokens) {
-		return new BinaryOperator("==");
-	}
-	
 	@Override
 	public String toString() {
 		return this.operator;
