@@ -20,7 +20,7 @@ public class Type extends AnyType {
 
 	@Override
 	public String getRegex() {
-		return "^integer|boolean";
+		return "^integer|boolean$";
 	}
 	
 }

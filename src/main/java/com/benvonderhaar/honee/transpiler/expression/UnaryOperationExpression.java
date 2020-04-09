@@ -42,4 +42,15 @@ public class UnaryOperationExpression extends Expression {
             return valueToBeUsed;
         }
     }
+
+    @Override
+    public String toString() {
+        Variable v = exp.getVariable();
+
+        if (isPreUnaryOperator) {
+            return op.toString() + v.toString();
+        } else {
+            return v.toString() + op.toString();
+        }
+    }
 }

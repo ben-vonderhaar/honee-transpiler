@@ -16,13 +16,23 @@ public class AssignmentStatement extends Statement {
 	private Type t;
 	private Variable v;
 	private Expression exp;
+
+	public AssignmentStatement(String a) {
+
+	}
 	
-	public AssignmentStatement(Type t, VariableExpression v, Equal e, Expression exp) throws HoneeException {
+	public AssignmentStatement(Type t, VariableExpression v, Equal e, Expression exp) {
 		this.t = t;
 		this.v = v.getVariable();
 		this.exp = exp;
-		
-		VariableAssignmentRegistry.add(t, this.v);
+
+		try {
+			VariableAssignmentRegistry.add(t, this.v);
+		} catch (HoneeException ex) {
+			System.out.println("Could not add variable to registry: " + this.v.toString());
+			ex.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 	@Override

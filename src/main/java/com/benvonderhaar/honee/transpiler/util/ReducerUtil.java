@@ -20,4 +20,25 @@ public class ReducerUtil {
 
     public static final AssignmentStatementReducer ASSIGNMENT_STATEMENT_REDUCER
             = new AssignmentStatementReducer();
+
+    public static final AssignmentLineOfCodeReducer ASSIGNMENT_LINE_OF_CODE_REDUCER
+            = new AssignmentLineOfCodeReducer();
+    public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
+            = new ExpressionLineOfCodeReducer();
+
+    public static final TwoLinesOfCodeReducer TWO_LINES_OF_CODE_REDUCER
+            = new TwoLinesOfCodeReducer();
+    public static final FoldLineOfCodeIntoLinesOfCodeReducer FOLD_LINE_OF_CODE_INTO_LINES_OF_CODE_REDUCER
+            = new FoldLineOfCodeIntoLinesOfCodeReducer();
+    public static final SingleLineClosureBodyReducer SINGLE_LINE_CLOSURE_BODY_REDUCER
+            = new SingleLineClosureBodyReducer();
+    public static final MultiLineClosureBodyReducer MULTI_LINE_CLOSURE_BODY_REDUCER
+            = new MultiLineClosureBodyReducer();
+
+    public static final ClassConstructReducer CLASS_CONSTRUCT_REDUCER
+            = new ClassConstructReducer();
+    public static final StaticFunctionConstructReducer STATIC_FUNCTION_CONSTRUCT_REDUCER
+            = new StaticFunctionConstructReducer();
+    public static final SingleFunctionClassReducer SINGLE_FUNCTION_CLASS_REDUCER
+            = new SingleFunctionClassReducer();
 }

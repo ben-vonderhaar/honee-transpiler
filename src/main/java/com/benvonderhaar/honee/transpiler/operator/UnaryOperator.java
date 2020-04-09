@@ -48,6 +48,11 @@ public class UnaryOperator extends Operator {
     }
 
     @Override
+    public String toString() {
+        return this.operator;
+    }
+
+    @Override
     public String getRegex() {
         return "^(\\-\\-)|(\\+\\+)";
     }

@@ -1,0 +1,10 @@
+public class Test {
+
+    public static staticMethod() {
+
+        integer a = 1;
+        integer b = a++;
+
+    }
+
+}
