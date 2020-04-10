@@ -8,7 +8,8 @@ public class AccessModifier extends Keyword {
 
     }
 
-    public static Class<? extends AccessModifier> getAccessModifier(String accessModifier) throws HoneeException {
+    public static Class<? extends AccessModifier> getAccessModifierClass(String accessModifier) throws HoneeException {
+
         if (accessModifier.equals("public")) {
             return PublicKeyword.class;
         } else if (accessModifier.equals("private")) {
@@ -17,6 +18,14 @@ public class AccessModifier extends Keyword {
             throw new HoneeException("Unrecognized access modifier: " + accessModifier);
         }
 
+    }
+
+    public static AccessModifier publicKeyword() {
+        return new PublicKeyword("");
+    }
+
+    public static AccessModifier privateKeyword() {
+        return new PrivateKeyword("");
     }
 
     @Override

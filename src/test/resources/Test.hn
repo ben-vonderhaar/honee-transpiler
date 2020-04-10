@@ -7,4 +7,22 @@ public class Test {
 
     }
 
+    public publicMethod() {
+
+        integer c = 4;
+
+    }
+
+    private privateMethod() {
+
+        integer d = 5;
+
+    }
+
+    simplestPublicMethod() {
+
+        integer e = 6;
+
+    }
+
 }

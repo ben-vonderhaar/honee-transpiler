@@ -1,22 +1,18 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.function;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.FUNCTION;
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class SingleFunctionClassReducer implements Reducer {
-    @Override
-    public Boolean check(Token[] tokens) {
-        return tokens.length == 1 && tokenIsOfType(tokens[0], FunctionConstruct.class);
-    }
 
     @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return new TokenList<>((FunctionConstruct) tokens[0]);
     }
 

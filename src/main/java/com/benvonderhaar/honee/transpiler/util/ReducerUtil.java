@@ -1,6 +1,16 @@
 package com.benvonderhaar.honee.transpiler.util;
 
-import com.benvonderhaar.honee.transpiler.reducer.*;
+import com.benvonderhaar.honee.transpiler.Token;
+import com.benvonderhaar.honee.transpiler.construct.TokenList;
+import com.benvonderhaar.honee.transpiler.reducer.clazz.ClassConstructReducer;
+import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.expression.ParenthesisExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.expression.PostUnaryOperationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.expression.PreUnaryOperationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.function.*;
+import com.benvonderhaar.honee.transpiler.reducer.loc.*;
+import com.benvonderhaar.honee.transpiler.reducer.operator.MinusSpaceMinusToPlusReducer;
+import com.benvonderhaar.honee.transpiler.reducer.operator.TwoEqualsToDoubleEqualsReducer;
 
 public class ReducerUtil {
 
@@ -18,9 +28,6 @@ public class ReducerUtil {
     public static final ParenthesisExpressionReducer PARENTHESIS_EXPRESSION_REDUCER
             = new ParenthesisExpressionReducer();
 
-    public static final AssignmentStatementReducer ASSIGNMENT_STATEMENT_REDUCER
-            = new AssignmentStatementReducer();
-
     public static final AssignmentLineOfCodeReducer ASSIGNMENT_LINE_OF_CODE_REDUCER
             = new AssignmentLineOfCodeReducer();
     public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
@@ -37,9 +44,21 @@ public class ReducerUtil {
 
     public static final ClassConstructReducer CLASS_CONSTRUCT_REDUCER
             = new ClassConstructReducer();
-    public static final StaticFunctionConstructReducer STATIC_FUNCTION_CONSTRUCT_REDUCER
-            = new StaticFunctionConstructReducer();
+    public static final FunctionConstructReducer FUNCTION_CONSTRUCT_REDUCER
+            = new FunctionConstructReducer();
     public static final SingleFunctionClassReducer SINGLE_FUNCTION_CLASS_REDUCER
             = new SingleFunctionClassReducer();
+    public static final FoldFunctionIntoFunctionsReducer FOLD_FUNCTION_INTO_FUNCTIONS_REDUCER
+            = new FoldFunctionIntoFunctionsReducer();
 
+    public static boolean matchesTokenListType(Class<? extends Token> tokenType, Token token) {
+
+        try {
+            // TODO make this less awful
+            //noinspection rawtypes
+            return tokenType.isAssignableFrom(((TokenList) token).getListType());
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
 }

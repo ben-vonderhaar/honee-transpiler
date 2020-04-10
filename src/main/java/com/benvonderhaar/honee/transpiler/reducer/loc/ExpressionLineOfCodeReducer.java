@@ -1,23 +1,17 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.loc;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 
 public class ExpressionLineOfCodeReducer implements Reducer {
 
     @Override
-    public Boolean check(Token[] tokens) {
-        System.out.println("Check ExpressionLineOfCodeReducer");
-        System.out.println(Arrays.asList(tokens));
-        return false;
-    }
-
-    @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return null;
     }
 

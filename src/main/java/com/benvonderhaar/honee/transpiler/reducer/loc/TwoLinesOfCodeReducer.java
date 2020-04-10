@@ -1,25 +1,18 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.loc;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
-import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 
-import javax.sound.sampled.Line;
-import java.util.Arrays;
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.LINE_OF_CODE;
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class TwoLinesOfCodeReducer implements Reducer {
-    @Override
-    public Boolean check(Token[] tokens) {
-        return tokens.length == 2 && tokenIsOfType(tokens[0], LineOfCode.class)
-                && tokenIsOfType(tokens[1], LineOfCode.class);
-    }
 
     @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return new TokenList<>((LineOfCode) tokens[0], (LineOfCode) tokens[1]);
     }
 

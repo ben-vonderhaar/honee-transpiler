@@ -3,15 +3,13 @@ package com.benvonderhaar.honee.transpiler;
 import com.benvonderhaar.honee.transpiler.symbol.LParen;
 import com.benvonderhaar.honee.transpiler.symbol.RParen;
 import com.benvonderhaar.honee.transpiler.util.TokenTypesUtil;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import static com.benvonderhaar.honee.transpiler.util.ReducerUtil.STATIC_FUNCTION_CONSTRUCT_REDUCER;
+import static com.benvonderhaar.honee.transpiler.util.ReducerUtil.FUNCTION_CONSTRUCT_REDUCER;
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 import static org.junit.Assert.*;
@@ -62,13 +60,16 @@ public class TestTokenTypesUtil {
 
         List<List<Token>> tokenListOptions = TokenTypesUtil.getAllTokenListOptions(tokens);
 
-        tokenListOptions.forEach(System.out::println);
+        assertTrue(optionsContainsOption(tokenListOptions,
+                materializeTokensList(tokens)));
+        assertTrue(optionsContainsOption(tokenListOptions,
+                materializeTokensList(TokenTypesUtil.removeTokenFromList(tokens, 1))));
     }
 
     @Test
     public void testFunctionConstructReducerTokens() {
 
-        Token[] tokens = STATIC_FUNCTION_CONSTRUCT_REDUCER.getInputTokenTypes();
+        Token[] tokens = FUNCTION_CONSTRUCT_REDUCER.getInputTokenTypes();
         
         List<List<Token>> tokenListOptions = TokenTypesUtil.getAllTokenListOptions(tokens);
 

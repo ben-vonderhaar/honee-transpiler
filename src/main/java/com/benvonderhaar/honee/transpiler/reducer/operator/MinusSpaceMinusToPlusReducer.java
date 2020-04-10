@@ -1,8 +1,11 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.operator;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.symbol.Whitespace;
+
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.MINUS_BINARY_OPERATOR;
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.WHITESPACE;
@@ -10,15 +13,7 @@ import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.WHITESPACE;
 public class MinusSpaceMinusToPlusReducer implements Reducer {
 
     @Override
-    public Boolean check(Token[] tokens) {
-        return tokens.length == 3
-                && BinaryOperator.class.equals(tokens[0].getClass()) && tokens[0].toString().equals("-")
-                && Whitespace.class.equals(tokens[1].getClass())
-                && BinaryOperator.class.equals(tokens[2].getClass()) && tokens[2].toString().equals("-");
-    }
-
-    @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return new BinaryOperator("+");
     }
 

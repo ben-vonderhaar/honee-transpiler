@@ -1,31 +1,29 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.expression;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.expression.UnaryOperationExpression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
+
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.ANY_UNARY_OPERATOR;
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.VARIABLE_EXPRESSION;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
-public class PreUnaryOperationExpressionReducer implements Reducer {
-    @Override
-    public Boolean check(Token[] tokens) {
-        return tokenIsOfType(tokens[0], UnaryOperator.class)
-                && tokenIsOfType(tokens[1], VariableExpression.class);
-    }
+public class PostUnaryOperationExpressionReducer implements Reducer {
 
     @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return new UnaryOperationExpression(
-                (UnaryOperator) tokens[0],
-                (VariableExpression) tokens[1]);
+                (VariableExpression) tokens[0],
+                (UnaryOperator) tokens[1]);
     }
 
     @Override
     public Token[] getInputTokenTypes() {
-        return new Token[] { ANY_UNARY_OPERATOR, VARIABLE_EXPRESSION };
+        return new Token[] { VARIABLE_EXPRESSION, ANY_UNARY_OPERATOR };
     }
 
     @Override

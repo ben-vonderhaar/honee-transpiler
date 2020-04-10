@@ -8,17 +8,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.benvonderhaar.honee.transpiler.construct.OptionalToken;
 import com.benvonderhaar.honee.transpiler.expression.*;
 import com.benvonderhaar.honee.transpiler.keyword.*;
 import com.benvonderhaar.honee.transpiler.literal.*;
 import com.benvonderhaar.honee.transpiler.operator.*;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
+import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
 import com.benvonderhaar.honee.transpiler.registry.TokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.statement.Statement;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
-import com.benvonderhaar.honee.transpiler.util.BooleanTokenArrayTuple;
+import com.benvonderhaar.honee.transpiler.util.BooleanMatchedTokensArrayTokenTypesArrayTuple;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
+import com.benvonderhaar.honee.transpiler.util.TokenTypesAndMatchedTokensTuple;
 
 import static com.benvonderhaar.honee.transpiler.util.ReducerUtil.*;
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
@@ -111,7 +114,7 @@ public class Lexer {
 
 						} else if (tokenType.equals(AccessModifier.class)) {
 
-							tokens.add(TokenTypeRegistry.getTokenType(AccessModifier.getAccessModifier(match)));
+							tokens.add(TokenTypeRegistry.getTokenType(AccessModifier.getAccessModifierClass(match)));
 
 						} else if (tokenType.equals(VariableExpression.class)) {
 
@@ -136,6 +139,7 @@ public class Lexer {
 
 		} while (!honeeCodeInput.isEmpty());
 
+		System.out.println("\nTokenization result:");
 		tokens.forEach(token -> System.out.println(token.toString() + " :: " + token.getClass()));
 
 		return tokens.stream()
@@ -148,9 +152,9 @@ public class Lexer {
 
 		boolean didReduction = false;
 
-		while (!tokens.isEmpty() || didReduction) {
+		System.out.println("\nReducing:");
 
-			//System.out.println("Tokens: " + tokens);
+		while (!tokens.isEmpty() || didReduction) {
 
 			if (!tokens.isEmpty()) {
 				parserStack.add(tokens.remove(0));
@@ -160,6 +164,8 @@ public class Lexer {
 			System.out.println("Parser Stack: " + parserStack);
 
 			didReduction = false;
+
+			// TODO prioritize likely reductions this iteration based on previous reduction (if any)
 
 			if (reduce(parserStack, lookahead, PRE_UNARY_OPERATION_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
@@ -202,6 +208,7 @@ public class Lexer {
 			}
 
 			// [-, _, -] -> [+]
+			// TODO update to no longer look for separating whitespace, since there is none at this step anymore
 			if (reduce(parserStack, lookahead, MINUS_SPACE_MINUS_TO_PLUS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced - - -> +");
@@ -210,21 +217,13 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead, ASSIGNMENT_STATEMENT_REDUCER).bool()) {
+			if (reduce(parserStack, lookahead, ASSIGNMENT_LINE_OF_CODE_REDUCER).bool()) {
 				didReduction = true;
-				System.out.println("Reduced Assignment Statement");
+				System.out.println("Reduced Assignment LOC");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
 			};
-
-			if (reduce(parserStack, lookahead, ASSIGNMENT_LINE_OF_CODE_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced assignment statement LOC");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
 
 			if (reduce(parserStack, lookahead, EXPRESSION_LINE_OF_CODE_REDUCER).bool()) {
 				didReduction = true;
@@ -239,6 +238,7 @@ public class Lexer {
 				System.out.println("Reduced single LOC closure body");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
+				continue;
 			}
 
 			if (reduce(parserStack, lookahead, MULTI_LINE_CLOSURE_BODY_REDUCER).bool()) {
@@ -246,6 +246,7 @@ public class Lexer {
 				System.out.println("Reduced multiple LOC closure body");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
+				continue;
 			}
 
 			if (reduce(parserStack, lookahead, TWO_LINES_OF_CODE_REDUCER).bool()) {
@@ -253,6 +254,7 @@ public class Lexer {
 				System.out.println("Reduced two LOC into LinesOfCode");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
+				continue;
 			}
 
 			if (reduce(parserStack, lookahead, FOLD_LINE_OF_CODE_INTO_LINES_OF_CODE_REDUCER).bool()) {
@@ -260,11 +262,20 @@ public class Lexer {
 				System.out.println("Folded LOC into existing LinesOfCode");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
+				continue;
 			}
 
-			if (reduce(parserStack, lookahead, STATIC_FUNCTION_CONSTRUCT_REDUCER).bool()) {
+			if (reduce(parserStack, lookahead, FOLD_FUNCTION_INTO_FUNCTIONS_REDUCER).bool()) {
 				didReduction = true;
-				System.out.println("Reduced static function definition");
+				System.out.println("Folded function into existing functions");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, FUNCTION_CONSTRUCT_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced function definition");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
@@ -285,18 +296,8 @@ public class Lexer {
 				continue;
 			}
 
-		//	System.out.println("No reduction\n");
-
 		}
 
-		if (tokenIsOfType(parserStack.get(0), Statement.class)) {
-			((Statement) parserStack.get(0)).evaluate();
-		} else if (tokenIsOfType(parserStack.get(0), Expression.class)) {
-			((Expression) parserStack.get(0)).evaluate();
-		}
-
-		// TODO last token on stack isn't handled, but so far is only a semicolon.  Verify this is ok and/or
-		// implement overarching strategy for dealing with semicolons
 	}
 
 	public static void processLine(String line) throws HoneeException, IllegalAccessException, InstantiationException, InvocationTargetException {
@@ -340,64 +341,103 @@ public class Lexer {
 	 * @return
 	 * @throws Exception
 	 */
-	private static BooleanTokenArrayTuple reduce(
+	private static BooleanMatchedTokensArrayTokenTypesArrayTuple reduce(
 			List<Token> stack,
 			Token lookahead,
-			Reducer reducer) throws HoneeException {
+			Reducer reducer) {
 
-		Token[] tokenTypes = reducer.getInputTokenTypes();
 		Class<? extends Token> outputClass = reducer.getOutputClass();
 
-		for (int i = 0; i <= stack.size() - tokenTypes.length; i++) {
+		List<TokenTypesAndMatchedTokensTuple> matches = getAllTokenListOptions(reducer.getInputTokenTypes()).stream()
+				.sorted((option1, option2) -> option2.size() - option1.size())
+				.map(tokenTypesOption -> {
 
-			if (tokenTypes[0].getClass().isAssignableFrom(stack.get(i).getClass())) {
+					List<Token> matchedTokens = new ArrayList<>();
 
-				boolean matchedAllTokens = true;
-				
-				for (int j = 0; j < tokenTypes.length; j++) {
-
-					if (!tokenTypes[j].getClass().isAssignableFrom(stack.get(i + j).getClass())) {
-						matchedAllTokens = false;
-						break;
+					if (reducer.getClass().equals(FunctionConstructReducer.class)
+							&& stack.size() > 6
+							&& stack.get(6).toString().equals("publicMethod")) {
+						System.out.println("checking function");
 					}
-					
-				}
-				
-				if (!matchedAllTokens) {
-					continue;
-				}
-				
-				// Operator priority
-				if (outputClass.equals(BinaryOperationExpression.class)
-					&& !BinaryOperationExpression.satisfiesOperatorPriorityRules(stack, lookahead, i)) {
-					continue;
-				}
 
-				List<Token> matchedTokens = new ArrayList<>();
-				
-				for (int j = 0; j < tokenTypes.length; j++) {
-					
-					Token thisToken = stack.remove(i);
-					
-					matchedTokens.add(Literal.class.isAssignableFrom(thisToken.getClass()) 
-							? new LiteralExpression((Literal) thisToken) : thisToken);
-				}
+					for (int i = 0; i <= stack.size() - tokenTypesOption.size(); i++) {
 
-				Token[] matchedTokensArray = matchedTokens.toArray(new Token[0]);
+						boolean firstTokenIsOptional = tokenIsOfType(tokenTypesOption.get(0), OptionalToken.class);
+						Class<? extends Token> materializedFirstTokenClass = firstTokenIsOptional ?
+								((OptionalToken<? extends Token>) tokenTypesOption.get(0)).getMaterializedToken().getClass() :
+								tokenTypesOption.get(0).getClass();
 
-				if (reducer.check(matchedTokensArray)) {
-					stack.add(i, reducer.reduce(matchedTokensArray));
-					return new BooleanTokenArrayTuple(true, matchedTokens);
-				} else {
-					// Put matched tokens back onto the stack
-					while (!matchedTokens.isEmpty()) {
-						stack.add(i, matchedTokens.remove(matchedTokens.size() - 1));
+						if (materializedFirstTokenClass.isAssignableFrom(stack.get(i).getClass())) {
+
+							boolean matchedAllTokens = true;
+
+							for (int j = 0; j < tokenTypesOption.size(); j++) {
+
+								boolean tokenIsOptional = tokenIsOfType(tokenTypesOption.get(j), OptionalToken.class);
+								Class<? extends Token> materializedTokenClass = tokenIsOptional ?
+										((OptionalToken<? extends Token>) tokenTypesOption.get(j)).getMaterializedToken().getClass() :
+										tokenTypesOption.get(j).getClass();
+
+								if (!materializedTokenClass.isAssignableFrom(stack.get(i + j).getClass())) {
+									matchedAllTokens = false;
+									break;
+								}
+
+							}
+
+							if (!matchedAllTokens) {
+								continue;
+							}
+
+							// Operator priority
+							if (outputClass.equals(BinaryOperationExpression.class)
+									&& !BinaryOperationExpression.satisfiesOperatorPriorityRules(stack, lookahead, i)) {
+								continue;
+							}
+
+							for (int j = 0; j < tokenTypesOption.size(); j++) {
+
+								Token thisToken = stack.remove(i);
+
+								matchedTokens.add(Literal.class.isAssignableFrom(thisToken.getClass())
+										? new LiteralExpression((Literal) thisToken) : thisToken);
+							}
+
+							Token[] matchedTokensArray = matchedTokens.toArray(new Token[0]);
+
+							if (reducer.check(matchedTokensArray)) {
+								stack.add(i, reducer.reduce(matchedTokensArray, tokenTypesOption));
+							} else {
+								// Put matched tokens back onto the stack
+								while (!matchedTokens.isEmpty()) {
+									stack.add(i, matchedTokens.remove(matchedTokens.size() - 1));
+								}
+							}
+						}
 					}
-				}
-			} 
+
+					return new TokenTypesAndMatchedTokensTuple(tokenTypesOption, matchedTokens);
+				})
+				.filter(TokenTypesAndMatchedTokensTuple::hasMatchedTokens)
+				.collect(Collectors.toList());
+
+		if (1 == matches.size()) {
+
+			return new BooleanMatchedTokensArrayTokenTypesArrayTuple(
+					true, matches.get(0).getMatchedTokens(), matches.get(0).getTokenTypesOption());
+
+		} else if (matches.isEmpty()) {
+
+			return new BooleanMatchedTokensArrayTokenTypesArrayTuple(
+					false, null, null);
+
+		} else {
+
+			System.out.println("Multiple token pattern matches for " + reducer.getClass().getName());
+			System.exit(1);
+			return null;
+
 		}
-		
-		return new BooleanTokenArrayTuple(false, null);
 	}
 
 }

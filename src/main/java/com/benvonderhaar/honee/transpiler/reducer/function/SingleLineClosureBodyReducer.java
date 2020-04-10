@@ -1,25 +1,18 @@
-package com.benvonderhaar.honee.transpiler.reducer;
+package com.benvonderhaar.honee.transpiler.reducer.function;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.ClosureBody;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
-import com.benvonderhaar.honee.transpiler.symbol.LCurlyBracket;
-import com.benvonderhaar.honee.transpiler.symbol.RCurlyBracket;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
+
+import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class SingleLineClosureBodyReducer implements Reducer {
 
     @Override
-    public Boolean check(Token[] tokens) {
-        return tokens.length == 3 && tokenIsOfType(tokens[0], LCurlyBracket.class)
-                && tokenIsOfType(tokens[1], LineOfCode.class)
-                && tokenIsOfType(tokens[2], RCurlyBracket.class);
-    }
-
-    @Override
-    public Token reduce(Token[] tokens) {
+    public Token reduce(Token[] tokens, List<Token> tokenTypes) {
         return new ClosureBody((LineOfCode) tokens[1]);
     }
 
