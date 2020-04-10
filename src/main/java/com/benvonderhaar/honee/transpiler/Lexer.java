@@ -27,13 +27,13 @@ import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfTyp
 public class Lexer {
 
 	public static void main(String[] args) throws HoneeException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		String[] lines = { 
+
+		String[] lines = {
 				"integer a = (1+2)*(8/4)+2*(1+5+6);", 
 				"boolean b = a==31;" };
 
 		processLine(lines[0]);
 		processLine(lines[1]);
-
 	}
 
 	public static void processHnFileContents(String fileContents) throws Throwable {
@@ -83,7 +83,6 @@ public class Lexer {
 
 				Matcher matcher = pattern.matcher(honeeCodeInput);
 
-
 				if (matcher.find() && !matcher.group(0).equals("")) {
 
 					String match = matcher.group(0);
@@ -108,14 +107,11 @@ public class Lexer {
 
 						} else if (tokenType.equals(Type.class)) {
 
-							// TODO use tokentyperegistry
-							tokens.add((Token) Type.getType(match)
-									.getConstructors()[0].newInstance(""));
+							tokens.add(TokenTypeRegistry.getTokenType(Type.getType(match)));
 
 						} else if (tokenType.equals(AccessModifier.class)) {
 
-							tokens.add((AccessModifier) AccessModifier.getAccessModifier(match)
-									.getConstructors()[0].newInstance(""));
+							tokens.add(TokenTypeRegistry.getTokenType(AccessModifier.getAccessModifier(match)));
 
 						} else if (tokenType.equals(VariableExpression.class)) {
 
@@ -123,9 +119,7 @@ public class Lexer {
 
 						} else {
 
-							// TODO use tokentyperegistry
-							tokens.add(tokenType.cast(
-									tokenType.getConstructors()[0].newInstance(match)));
+							tokens.add(TokenTypeRegistry.getTokenType(tokenType));
 
 						}
 					}

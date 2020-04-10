@@ -10,7 +10,7 @@ public class VariableExpression extends Expression {
 	private Variable v;
 
 	public VariableExpression(String variableExpression) {
-
+		v = new Variable(variableExpression);
 	}
 	
 	public VariableExpression(Variable v) {

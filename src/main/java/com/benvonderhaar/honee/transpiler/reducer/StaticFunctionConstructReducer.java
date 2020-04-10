@@ -10,8 +10,6 @@ import com.benvonderhaar.honee.transpiler.keyword.StaticKeyword;
 import com.benvonderhaar.honee.transpiler.symbol.LParen;
 import com.benvonderhaar.honee.transpiler.symbol.RParen;
 
-import java.util.Arrays;
-
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
@@ -41,7 +39,7 @@ public class StaticFunctionConstructReducer implements Reducer {
 
     @Override
     public Token[] getInputTokenTypes() {
-        return new Token[] { ANY_ACCESS_MODIFIER, STATIC, VARIABLE_EXPRESSION, L_PAREN, R_PAREN, CLOSURE_BODY};
+        return new Token[] { OPTIONAL_ACCESS_MODIFIER, OPTIONAL_STATIC, VARIABLE_EXPRESSION, L_PAREN, R_PAREN, CLOSURE_BODY};
     }
 
     @Override

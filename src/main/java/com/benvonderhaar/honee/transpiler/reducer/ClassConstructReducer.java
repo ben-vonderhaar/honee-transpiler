@@ -3,15 +3,12 @@ package com.benvonderhaar.honee.transpiler.reducer;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.ClassConstruct;
 import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
-import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.keyword.ClassKeyword;
 import com.benvonderhaar.honee.transpiler.symbol.LCurlyBracket;
 import com.benvonderhaar.honee.transpiler.symbol.RCurlyBracket;
-
-import java.util.Arrays;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;

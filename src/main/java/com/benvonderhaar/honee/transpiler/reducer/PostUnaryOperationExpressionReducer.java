@@ -5,8 +5,6 @@ import com.benvonderhaar.honee.transpiler.expression.UnaryOperationExpression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 
-import java.util.Arrays;
-
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.ANY_UNARY_OPERATOR;
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.VARIABLE_EXPRESSION;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;

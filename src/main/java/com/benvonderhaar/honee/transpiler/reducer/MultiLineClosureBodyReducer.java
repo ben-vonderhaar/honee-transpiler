@@ -2,7 +2,6 @@ package com.benvonderhaar.honee.transpiler.reducer;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.ClosureBody;
-import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
 import com.benvonderhaar.honee.transpiler.symbol.LCurlyBracket;

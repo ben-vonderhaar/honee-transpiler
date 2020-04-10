@@ -41,4 +41,5 @@ public class ReducerUtil {
             = new StaticFunctionConstructReducer();
     public static final SingleFunctionClassReducer SINGLE_FUNCTION_CLASS_REDUCER
             = new SingleFunctionClassReducer();
+
 }

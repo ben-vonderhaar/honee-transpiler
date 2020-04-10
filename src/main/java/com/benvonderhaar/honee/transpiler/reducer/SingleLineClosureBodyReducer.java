@@ -6,8 +6,6 @@ import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
 import com.benvonderhaar.honee.transpiler.symbol.LCurlyBracket;
 import com.benvonderhaar.honee.transpiler.symbol.RCurlyBracket;
 
-import java.util.Arrays;
-
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
@@ -22,9 +20,6 @@ public class SingleLineClosureBodyReducer implements Reducer {
 
     @Override
     public Token reduce(Token[] tokens) {
-
-        System.out.println("reduce SLCBR");
-        System.out.println(Arrays.asList(tokens));
         return new ClosureBody((LineOfCode) tokens[1]);
     }
 

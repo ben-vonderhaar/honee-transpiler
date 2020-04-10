@@ -1,9 +1,7 @@
 package com.benvonderhaar.honee.transpiler.util;
 
-import com.benvonderhaar.honee.transpiler.construct.ClosureBody;
-import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
-import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
-import com.benvonderhaar.honee.transpiler.construct.TokenList;
+import com.benvonderhaar.honee.transpiler.Token;
+import com.benvonderhaar.honee.transpiler.construct.*;
 import com.benvonderhaar.honee.transpiler.expression.AnyExpression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
@@ -14,6 +12,11 @@ import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.AnyType;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class TokenTypesUtil {
 
@@ -46,4 +49,46 @@ public class TokenTypesUtil {
     public static final TokenList<LineOfCode> LINES_OF_CODE = new TokenList<>(LINE_OF_CODE);
 
     public static final ClosureBody CLOSURE_BODY = new ClosureBody(LINE_OF_CODE);
+
+    public static final OptionalToken<StaticKeyword> OPTIONAL_STATIC = new OptionalToken<>(STATIC);
+    public static final OptionalToken<AccessModifier> OPTIONAL_ACCESS_MODIFIER = new OptionalToken<>(ANY_ACCESS_MODIFIER);
+
+    public static List<List<Token>> getAllTokenListOptions(Token[] tokens) {
+        Set<List<Token>> tokenListOptions = new HashSet<>();
+
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokenIsOfType(tokens[i], OptionalToken.class)) {
+                tokenListOptions.addAll(getAllTokenListOptions(removeTokenFromList(tokens, i)));
+            }
+        }
+
+        List<Token> materializedTokenList = materializeTokensList(tokens);
+
+        tokenListOptions.add(materializedTokenList);
+
+        return new ArrayList<>(tokenListOptions);
+    }
+
+    public static List<Token> materializeTokensList(Token[] tokens) {
+
+        return Arrays.stream(tokens)
+                .map(token -> tokenIsOfType(token, OptionalToken.class)
+                        ? ((OptionalToken<? extends Token>) token).getMaterializedToken() : token)
+                .collect(Collectors.toList());
+
+    }
+
+    public static Token[] removeTokenFromList(Token[] tokens, int index) {
+        Token[] reducedTokenList = new Token[tokens.length - 1];
+
+        for (int i = 0; i < index; i++) {
+            reducedTokenList[i] = tokens[i];
+        }
+
+        for (int i = index + 1; i < tokens.length; i++) {
+            reducedTokenList[i - 1] = tokens[i];
+        }
+
+        return reducedTokenList;
+    }
 }
