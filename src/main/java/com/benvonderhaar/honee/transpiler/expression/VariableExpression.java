@@ -1,11 +1,12 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.registry.VariableAssignmentRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public class VariableExpression extends Expression {
+public class VariableExpression extends Expression implements Lexable {
 
 	private Variable v;
 

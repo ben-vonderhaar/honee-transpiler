@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.keyword;
 
-public class ClassKeyword extends Keyword {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class ClassKeyword extends Keyword implements Lexable {
 
     public ClassKeyword(String clazz) {
 

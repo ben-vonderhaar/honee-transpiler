@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.symbol;
 
-public class RParen extends Symbol {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class RParen extends Symbol implements Lexable {
 
 	public RParen(String rParen) {
 		

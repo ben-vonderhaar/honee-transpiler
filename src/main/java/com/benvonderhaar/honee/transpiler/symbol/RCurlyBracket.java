@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.symbol;
 
-public class RCurlyBracket extends Symbol {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class RCurlyBracket extends Symbol implements Lexable {
 
     public RCurlyBracket(String rCurlyBracket) {
 

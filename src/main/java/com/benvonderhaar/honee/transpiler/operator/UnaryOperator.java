@@ -1,5 +1,6 @@
 package com.benvonderhaar.honee.transpiler.operator;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
@@ -8,7 +9,7 @@ import com.benvonderhaar.honee.transpiler.registry.VariableAssignmentRegistry;
 
 import java.util.function.Function;
 
-public class UnaryOperator extends Operator {
+public class UnaryOperator extends Operator implements Lexable {
 
     private final String operator;
     private Function<Expression, Expression> operation;

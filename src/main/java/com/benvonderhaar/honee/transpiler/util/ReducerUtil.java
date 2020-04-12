@@ -2,6 +2,8 @@ package com.benvonderhaar.honee.transpiler.util;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
+import com.benvonderhaar.honee.transpiler.expression.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.reducer.VariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.reducer.clazz.ClassConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.ParenthesisExpressionReducer;
@@ -27,6 +29,8 @@ public class ReducerUtil {
             = new BinaryOperationExpressionReducer();
     public static final ParenthesisExpressionReducer PARENTHESIS_EXPRESSION_REDUCER
             = new ParenthesisExpressionReducer();
+    public static final VariableDeclarationReducer VARIABLE_DECLARATION_REDUCER
+            = new VariableDeclarationReducer();
 
     public static final AssignmentLineOfCodeReducer ASSIGNMENT_LINE_OF_CODE_REDUCER
             = new AssignmentLineOfCodeReducer();

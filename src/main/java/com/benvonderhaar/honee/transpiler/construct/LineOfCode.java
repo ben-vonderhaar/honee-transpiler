@@ -21,11 +21,6 @@ public class LineOfCode extends ConstructToken {
     }
 
     @Override
-    public String getRegex() throws HoneeException {
-        throw new HoneeException("Cannot parse type " + this.getClass().getName());
-    }
-
-    @Override
     public String toString() {
         if (null != this.assignmentStatement) {
             return assignmentStatement.toString();

@@ -1,8 +1,9 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 
-public class LiteralExpression extends Expression {
+public class LiteralExpression extends Expression implements Lexable {
 
 	private Literal literal;
 

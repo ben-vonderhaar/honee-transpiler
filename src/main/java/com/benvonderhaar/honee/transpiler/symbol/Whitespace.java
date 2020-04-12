@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.symbol;
 
-public class Whitespace extends Symbol {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class Whitespace extends Symbol implements Lexable {
 
 	public Whitespace(String whitespace) {
 

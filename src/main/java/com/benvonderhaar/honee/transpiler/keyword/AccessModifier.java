@@ -1,8 +1,9 @@
 package com.benvonderhaar.honee.transpiler.keyword;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public class AccessModifier extends Keyword {
+public class AccessModifier extends Keyword implements Lexable {
 
     public AccessModifier(String accessModifier) {
 

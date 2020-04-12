@@ -3,6 +3,7 @@ package com.benvonderhaar.honee.transpiler.util;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.*;
 import com.benvonderhaar.honee.transpiler.expression.AnyExpression;
+import com.benvonderhaar.honee.transpiler.expression.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.keyword.ClassKeyword;
@@ -34,6 +35,7 @@ public class TokenTypesUtil {
     public static final AnyExpression ANY_EXPRESSION = new AnyExpression();
     public static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression("");
     public static final AssignmentStatement ASSIGNMENT_STATEMENT = new AssignmentStatement("");
+    public static final VariableDeclaration VARIABLE_DECLARATION = new VariableDeclaration("");
 
     public static final BinaryOperator ANY_BINARY_OPERATOR = new BinaryOperator("");
     public static final BinaryOperator MINUS_BINARY_OPERATOR = new BinaryOperator("-");

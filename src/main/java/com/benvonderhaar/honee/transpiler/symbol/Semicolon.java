@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.symbol;
 
-public class Semicolon extends Symbol {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class Semicolon extends Symbol implements Lexable {
 
 	public Semicolon(String semicolon) {
 		

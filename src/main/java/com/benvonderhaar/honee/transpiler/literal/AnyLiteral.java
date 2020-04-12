@@ -5,9 +5,4 @@ import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class AnyLiteral extends Token {
 
-    @Override
-    public String getRegex() throws HoneeException {
-        throw new HoneeException("Cannot parse type " + this.getClass().getName());
-    }
-
 }

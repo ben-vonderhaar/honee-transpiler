@@ -15,8 +15,7 @@ import com.benvonderhaar.honee.transpiler.literal.*;
 import com.benvonderhaar.honee.transpiler.operator.*;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
-import com.benvonderhaar.honee.transpiler.registry.TokenTypeRegistry;
-import com.benvonderhaar.honee.transpiler.statement.Statement;
+import com.benvonderhaar.honee.transpiler.registry.LexableTokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.util.BooleanMatchedTokensArrayTokenTypesArrayTuple;
@@ -77,12 +76,12 @@ public class Lexer {
 
 			for (Class<? extends Token> tokenType : tokenTypes) {
 
-				if (!TokenTypeRegistry.hasRegex(tokenType)) {
+				if (!LexableTokenTypeRegistry.hasRegex(tokenType)) {
 					continue;
 				}
 
 				Pattern pattern = Pattern.compile(
-						TokenTypeRegistry.getTokenType(tokenType).getRegex());
+						LexableTokenTypeRegistry.getTokenType(tokenType).getRegex());
 
 				Matcher matcher = pattern.matcher(honeeCodeInput);
 
@@ -110,11 +109,11 @@ public class Lexer {
 
 						} else if (tokenType.equals(Type.class)) {
 
-							tokens.add(TokenTypeRegistry.getTokenType(Type.getType(match)));
+							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(Type.getType(match)));
 
 						} else if (tokenType.equals(AccessModifier.class)) {
 
-							tokens.add(TokenTypeRegistry.getTokenType(AccessModifier.getAccessModifierClass(match)));
+							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(AccessModifier.getAccessModifierClass(match)));
 
 						} else if (tokenType.equals(VariableExpression.class)) {
 
@@ -122,7 +121,7 @@ public class Lexer {
 
 						} else {
 
-							tokens.add(TokenTypeRegistry.getTokenType(tokenType));
+							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(tokenType));
 
 						}
 					}
@@ -217,13 +216,21 @@ public class Lexer {
 				continue;
 			}
 
+			if (reduce(parserStack, lookahead, VARIABLE_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced Variable Declaration");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
 			if (reduce(parserStack, lookahead, ASSIGNMENT_LINE_OF_CODE_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced Assignment LOC");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
-			};
+			}
 
 			if (reduce(parserStack, lookahead, EXPRESSION_LINE_OF_CODE_REDUCER).bool()) {
 				didReduction = true;

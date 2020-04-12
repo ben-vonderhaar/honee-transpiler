@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.literal;
 
-public class IntegerLiteral extends NumberLiteral {
+import com.benvonderhaar.honee.transpiler.Lexable;
+
+public class IntegerLiteral extends NumberLiteral implements Lexable {
 	
 	private String number;
 	
@@ -11,7 +13,8 @@ public class IntegerLiteral extends NumberLiteral {
 	public Integer get() {
 		return Integer.parseInt(this.number);
 	}
-	
+
+	@Override
 	public String getRegex() {
 		return "";
 	}

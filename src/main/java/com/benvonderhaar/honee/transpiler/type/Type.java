@@ -1,8 +1,9 @@
 package com.benvonderhaar.honee.transpiler.type;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public class Type extends AnyType {
+public class Type extends AnyType implements Lexable {
 
 	public Type(String type) {
 

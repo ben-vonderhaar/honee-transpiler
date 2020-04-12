@@ -2,16 +2,15 @@ package com.benvonderhaar.honee.transpiler.operator;
 
 import java.util.function.BiFunction;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.LiteralExpression;
 import com.benvonderhaar.honee.transpiler.literal.BooleanLiteral;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
-import com.benvonderhaar.honee.transpiler.symbol.Equal;
-import com.benvonderhaar.honee.transpiler.symbol.Whitespace;
 
-public class BinaryOperator extends Operator {
+public class BinaryOperator extends Operator implements Lexable {
 
 	private final String operator;
 	private BiFunction<Expression, Expression, Expression> operation;
