@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
@@ -41,7 +42,9 @@ public class UnaryOperationExpression extends Expression {
                 VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
                 return VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope());
             } else {
-                Literal valueToBeUsed = VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope());
+                // TODO find a cleaner way to do this, probably during number refactor stage
+                Literal valueToBeUsed = new IntegerLiteral(
+                        VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope()).toString());
                 VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
                 return valueToBeUsed;
             }
