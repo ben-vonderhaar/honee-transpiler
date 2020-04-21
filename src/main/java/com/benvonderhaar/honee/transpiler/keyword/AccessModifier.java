@@ -9,7 +9,7 @@ public class AccessModifier extends Keyword implements Lexable {
 
     }
 
-    public static Class<? extends AccessModifier> getAccessModifierClass(String accessModifier) throws HoneeException {
+    public static Class<? extends AccessModifier> getAccessModifier(String accessModifier) throws HoneeException {
 
         if (accessModifier.equals("public")) {
             return PublicKeyword.class;

@@ -1,11 +1,9 @@
-package com.benvonderhaar.honee.transpiler.expression;
+package com.benvonderhaar.honee.transpiler;
 
-import com.benvonderhaar.honee.transpiler.Lexable;
-import com.benvonderhaar.honee.transpiler.Token;
-import com.benvonderhaar.honee.transpiler.literal.Literal;
+import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.type.FunctionType;
 import com.benvonderhaar.honee.transpiler.type.Type;
-import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class VariableDeclaration extends Token implements Lexable {
 
@@ -22,6 +20,11 @@ public class VariableDeclaration extends Token implements Lexable {
         this.variable = variableExpression.getVariable();
     }
 
+    public static VariableDeclaration newFunctionDeclaration(VariableExpression name) {
+        // TODO create a TypeUtil class a la ReducerUtil
+        return new VariableDeclaration(new FunctionType(""), name);
+    }
+
     @Override
     public String getRegex() {
         return null;
@@ -33,5 +36,10 @@ public class VariableDeclaration extends Token implements Lexable {
 
     public Variable getVariable() {
         return this.variable;
+    }
+
+    @Override
+    public String toString() {
+        return this.type.toString() + " " + this.getVariable().getName();
     }
 }

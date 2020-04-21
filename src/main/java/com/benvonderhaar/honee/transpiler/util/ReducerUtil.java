@@ -2,7 +2,6 @@ package com.benvonderhaar.honee.transpiler.util;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
-import com.benvonderhaar.honee.transpiler.expression.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.reducer.VariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.reducer.clazz.ClassConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpressionReducer;

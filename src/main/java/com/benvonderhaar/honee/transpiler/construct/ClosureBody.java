@@ -1,6 +1,8 @@
 package com.benvonderhaar.honee.transpiler.construct;
 
-public class ClosureBody extends ConstructToken {
+import com.benvonderhaar.honee.transpiler.Scope;
+
+public class ClosureBody extends ConstructToken implements Scope {
 
     private TokenList<LineOfCode> linesOfCode;
 
@@ -12,8 +14,26 @@ public class ClosureBody extends ConstructToken {
         this.linesOfCode = linesOfCode;
     }
 
+    public TokenList<LineOfCode> getLinesOfCode() {
+        return this.linesOfCode;
+    }
+
+    // TODO make interface evaluateable?
+    @Override
+    public void evaluate() {
+        linesOfCode.getTokenList().forEach(LineOfCode::evaluate);
+    }
+
+    @Override
+    public void propagateScope() {
+        this.linesOfCode.getTokenList().forEach(
+                lineOfCode -> lineOfCode.setScope(this)
+        );
+    }
+
     @Override
     public String toString() {
         return "{ " + linesOfCode.toString() + " }";
     }
+
 }

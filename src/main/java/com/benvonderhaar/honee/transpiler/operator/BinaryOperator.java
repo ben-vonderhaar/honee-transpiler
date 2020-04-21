@@ -3,17 +3,20 @@ package com.benvonderhaar.honee.transpiler.operator;
 import java.util.function.BiFunction;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.Token;
+import com.benvonderhaar.honee.transpiler.construct.ConstructToken;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.LiteralExpression;
 import com.benvonderhaar.honee.transpiler.literal.BooleanLiteral;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
+import com.benvonderhaar.honee.transpiler.util.TriFunction;
 
 public class BinaryOperator extends Operator implements Lexable {
 
 	private final String operator;
-	private BiFunction<Expression, Expression, Expression> operation;
+	private TriFunction<Scope, Expression, Expression, Expression> operation;
 	
 	public BinaryOperator(String operator) {
 		
@@ -56,13 +59,13 @@ public class BinaryOperator extends Operator implements Lexable {
 	}
 
 	@Override
-	public Literal evaluate(Expression... arguments) {
+	public Literal evaluate(Scope scope, Expression... arguments) {
 		
 		if (arguments.length != 2) {
 			throw new RuntimeException("Binary Operator accepts two arguments only");
 		}
 		
-		return this.operation.apply(arguments[0], arguments[1]).evaluate();
+		return this.operation.apply(scope, arguments[0], arguments[1]).evaluate();
 		
 	}
 
@@ -111,32 +114,34 @@ public class BinaryOperator extends Operator implements Lexable {
 	public static boolean isLowerPriority(Token a, Token b) {
 		return getPriority((BinaryOperator) a) < getPriority((BinaryOperator) b);
 	}
-	
-	public static Expression plus(Expression arg0, Expression arg1) {
+
+
+	// TODO allow any type of number/number variable
+	public static Expression plus(Scope scope, Expression arg0, Expression arg1) {
 		
 		return new LiteralExpression(
 				new IntegerLiteral(String.valueOf(((IntegerLiteral) arg0.evaluate()).get() + ((IntegerLiteral) arg1.evaluate()).get())));
 	}
 	
-	public static Expression minus(Expression arg0, Expression arg1) {
+	public static Expression minus(Scope scope, Expression arg0, Expression arg1) {
 		
 		return new LiteralExpression(
 				new IntegerLiteral(String.valueOf(((IntegerLiteral) arg0.evaluate()).get() - ((IntegerLiteral) arg1.evaluate()).get())));
 	}
 	
-	private static Expression multiply(Expression arg0, Expression arg1) {
+	private static Expression multiply(Scope scope, Expression arg0, Expression arg1) {
 		
 		return new LiteralExpression(
 				new IntegerLiteral(String.valueOf(((IntegerLiteral) arg0.evaluate()).get() * ((IntegerLiteral) arg1.evaluate()).get())));
 	}
 	
-	private static Expression divide(Expression arg0, Expression arg1) {
+	private static Expression divide(Scope scope, Expression arg0, Expression arg1) {
 		
 		return new LiteralExpression(
 				new IntegerLiteral(String.valueOf(((IntegerLiteral) arg0.evaluate()).get() / ((IntegerLiteral) arg1.evaluate()).get())));
 	}
 	
-	private static Expression isEqual(Expression arg0, Expression arg1) {
+	private static Expression isEqual(Scope scope, Expression arg0, Expression arg1) {
 
 		Literal arg0E = arg0.evaluate();
 		Literal arg1E = arg1.evaluate();

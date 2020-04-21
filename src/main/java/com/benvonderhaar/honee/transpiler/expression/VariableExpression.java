@@ -1,30 +1,40 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Scope;
+import com.benvonderhaar.honee.transpiler.construct.ConstructToken;
+import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
-import com.benvonderhaar.honee.transpiler.registry.VariableAssignmentRegistry;
+import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class VariableExpression extends Expression implements Lexable {
 
-	private Variable v;
+	private Variable variable;
+	private Scope scope;
 
 	public VariableExpression(String variableExpression) {
-		v = new Variable(variableExpression);
+		variable = new Variable(variableExpression);
 	}
 	
 	public VariableExpression(Variable v) {
-		this.v = v;
+		this.variable = v;
 	}
 	
 	public Variable getVariable() {
-		return this.v;
+		return this.variable;
 	}
 
 	@Override
 	public Literal evaluate() {
-		return VariableAssignmentRegistry.getVariableValue(v);
+		try {
+			return VariableRegistry.getVariableValue(this.variable.getName(), this.scope);
+		} catch (HoneeException e) {
+			e.printStackTrace();
+			System.exit(1);
+			return null;
+		}
 	}
 
 	@Override
@@ -34,7 +44,15 @@ public class VariableExpression extends Expression implements Lexable {
 
 	@Override
 	public String toString() {
-		return v.toString();
+		return variable.toString();
 	}
 
+	@Override
+	public void setScope(Scope scope) {
+		this.scope = scope;
+	}
+
+	public Scope getScope() {
+		return this.scope;
+	}
 }

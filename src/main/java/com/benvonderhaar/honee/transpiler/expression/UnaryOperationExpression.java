@@ -1,9 +1,12 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
+import com.benvonderhaar.honee.transpiler.Scope;
+import com.benvonderhaar.honee.transpiler.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
-import com.benvonderhaar.honee.transpiler.registry.VariableAssignmentRegistry;
+import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class UnaryOperationExpression extends Expression {
 
@@ -31,15 +34,21 @@ public class UnaryOperationExpression extends Expression {
     @Override
     public Literal evaluate() {
 
-        Variable v = exp.getVariable();
+        try {
+            VariableDeclaration v = VariableRegistry.getVariableInScopeByName(exp.getVariable().getName(), exp.getScope());
 
-        if (isPreUnaryOperator) {
-            VariableAssignmentRegistry.setVariableValue(v, op.evaluate(exp));
-            return VariableAssignmentRegistry.getVariableValue(v);
-        } else {
-            Literal valueToBeUsed = VariableAssignmentRegistry.getVariableValue(v);
-            VariableAssignmentRegistry.setVariableValue(v, op.evaluate(exp));
-            return valueToBeUsed;
+            if (isPreUnaryOperator) {
+                VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
+                return VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope());
+            } else {
+                Literal valueToBeUsed = VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope());
+                VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
+                return valueToBeUsed;
+            }
+        } catch (HoneeException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
         }
     }
 
@@ -52,5 +61,10 @@ public class UnaryOperationExpression extends Expression {
         } else {
             return v.toString() + op.toString();
         }
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.exp.setScope(scope);
     }
 }

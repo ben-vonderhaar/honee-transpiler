@@ -38,10 +38,10 @@ public class Lexer {
 		processLine(lines[1]);
 	}
 
-	public static void processHnFileContents(String fileContents) throws Throwable {
+	public static List<Token> processHnFileContents(String fileContents) throws Throwable {
 		System.out.println("File Contents: \n--------------------\n" + fileContents + "\n--------------------");
 		List<Token> tokens = tokenize(fileContents);
-		reduceTokens(tokens);
+		return reduceTokens(tokens);
 	}
 
 	public static List<Token> tokenize(String honeeCodeInput) throws HoneeException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -73,6 +73,8 @@ public class Lexer {
 		do {
 
 			foundToken = false;
+
+			//System.out.println(tokens);
 
 			for (Class<? extends Token> tokenType : tokenTypes) {
 
@@ -113,11 +115,15 @@ public class Lexer {
 
 						} else if (tokenType.equals(AccessModifier.class)) {
 
-							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(AccessModifier.getAccessModifierClass(match)));
+							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(AccessModifier.getAccessModifier(match)));
 
 						} else if (tokenType.equals(VariableExpression.class)) {
 
 							tokens.add(new VariableExpression(new Variable(match)));
+
+						} else if (tokenType.equals(UnaryOperator.class)) {
+
+							tokens.add(UnaryOperator.getUnaryOperator(match));
 
 						} else {
 
@@ -145,7 +151,7 @@ public class Lexer {
 				.filter(token -> !token.getClass().equals(Whitespace.class)).collect(Collectors.toList());
 	}
 
-	public static void reduceTokens(List<Token> tokens) throws HoneeException {
+	public static List<Token> reduceTokens(List<Token> tokens) throws HoneeException {
 		List<Token> parserStack = new ArrayList<>();
 		Token lookahead = null;
 
@@ -305,9 +311,11 @@ public class Lexer {
 
 		}
 
+		return parserStack;
+
 	}
 
-	public static void processLine(String line) throws HoneeException, IllegalAccessException, InstantiationException, InvocationTargetException {
+	public static List<Token> processLine(String line) throws HoneeException, IllegalAccessException, InstantiationException, InvocationTargetException {
 		// TODO:
 		// * Simplify BinaryOperator rules
 		// * Support for floats
@@ -327,7 +335,7 @@ public class Lexer {
 		*/
 
 		List<Token> tokens = tokenize(line);
-		reduceTokens(tokens);
+		return reduceTokens(tokens);
 	}
 
 	/**

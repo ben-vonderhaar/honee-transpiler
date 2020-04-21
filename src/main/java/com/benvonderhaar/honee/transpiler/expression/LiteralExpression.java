@@ -1,6 +1,7 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 
 public class LiteralExpression extends Expression implements Lexable {
@@ -28,5 +29,10 @@ public class LiteralExpression extends Expression implements Lexable {
 	@Override
 	public String toString() {
 		return null == this.literal ? "" : this.literal.toString();
+	}
+
+	@Override
+	public void setScope(Scope scope) {
+		// do nothing
 	}
 }

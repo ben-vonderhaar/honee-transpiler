@@ -1,7 +1,9 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.Token;
+import com.benvonderhaar.honee.transpiler.construct.ConstructToken;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
 
@@ -13,16 +15,27 @@ public class BinaryOperationExpression extends Expression {
 
 	private Expression lhs, rhs;
 	private BinaryOperator op;
-	
+	private Scope scope;
+
 	public BinaryOperationExpression(Expression lhs, BinaryOperator op, Expression rhs) {
 		this.lhs = lhs;
 		this.op = op;
 		this.rhs = rhs;
 	}
-	
+
+	@Override
+	public void setScope(Scope scope) {
+
+		if (null != this.scope) {
+			System.out.println("Cannot reassign scope to " + this.toString() + " - already set to " + this.scope.toString());
+		}
+
+		this.scope = scope;
+	}
+
 	@Override
 	public Literal evaluate() {
-		return this.op.evaluate(lhs, rhs);
+		return this.op.evaluate(scope, lhs, rhs);
 	}
 
 	@Override

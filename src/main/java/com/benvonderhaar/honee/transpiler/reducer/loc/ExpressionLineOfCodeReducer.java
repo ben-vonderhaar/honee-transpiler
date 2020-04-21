@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.reducer.loc;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
+import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class ExpressionLineOfCodeReducer implements Reducer {
 
     @Override
     public Token reduce(Token[] tokens, List<Token> tokenTypes) {
-        return null;
+        return new LineOfCode((Expression) tokens[0]);
     }
 
     @Override

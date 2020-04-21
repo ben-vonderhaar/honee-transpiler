@@ -1,5 +1,6 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
+import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.symbol.LParen;
@@ -23,6 +24,11 @@ public class ParenthesisExpression extends Expression {
 	@Override
 	public String toString() {
 		return "(" + this.expression.toString() + ")";
+	}
+
+	@Override
+	public void setScope(Scope scope) {
+		// do nothing
 	}
 
 }

@@ -31,6 +31,10 @@ public class TokenList<T extends Token> extends ConstructToken {
         return this.listType;
     }
 
+    public List<T> getTokenList() {
+        return this.tokenList;
+    }
+
     @Override
     public String toString() {
         return tokenList.toString();

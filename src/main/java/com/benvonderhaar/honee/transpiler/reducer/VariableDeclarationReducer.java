@@ -1,7 +1,7 @@
 package com.benvonderhaar.honee.transpiler.reducer;
 
 import com.benvonderhaar.honee.transpiler.Token;
-import com.benvonderhaar.honee.transpiler.expression.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.type.Type;
 
@@ -14,6 +14,7 @@ public class VariableDeclarationReducer implements Reducer {
 
     @Override
     public Token reduce(Token[] tokens, List<Token> tokenTypes) {
+
         return new VariableDeclaration(
                 (Type) tokens[0],
                 (VariableExpression) tokens[1]);
