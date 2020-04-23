@@ -6,6 +6,8 @@ import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
+import com.benvonderhaar.honee.transpiler.type.FunctionType;
+import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class VariableRegistry<T> {
@@ -15,6 +17,9 @@ public class VariableRegistry<T> {
 	private static Map<Scope, ArrayList<VariableDeclaration>> variablesInScopeMap = new HashMap<>();
 	private static Map<VariableDeclaration, Literal> variableValuesMap = new HashMap<>();
 
+	// NOTE: this is primarily for debugging at the moment, and will not function properly
+	// if there are function name collisions
+	private static Map<String, Scope> functionNameMap = new HashMap<>();
 	
 	public static void add(VariableDeclaration variableDeclaration, Scope scope) throws HoneeException {
 
@@ -22,6 +27,12 @@ public class VariableRegistry<T> {
 
 		if (scopeVariables.contains(variableDeclaration)) {
 			throw new HoneeException(variableDeclaration.toString() + " already exists in this scope.");
+		}
+
+		// TODO introduce enum for scope type
+		// TODO
+		if (variableDeclaration.getType().toString().equals("function")) {
+			functionNameMap.put(variableDeclaration.getVariable().getName(), scope);
 		}
 
 		scopeVariables.add(variableDeclaration);
@@ -72,5 +83,15 @@ public class VariableRegistry<T> {
 		variableDeclarationMap.clear();
 		variablesInScopeMap.clear();
 		variableValuesMap.clear();
+	}
+
+	public static Scope getScope(String scopeName, String type) {
+
+		// TODO introduce enum for scope type
+		// TODO check type after fleshing out function name map capabilities (see notes above)
+		return functionNameMap.get(scopeName);
+
+		//variablesInScopeMap.keySet().stream()
+		//		.filter(scope -> scope.toString())
 	}
 }

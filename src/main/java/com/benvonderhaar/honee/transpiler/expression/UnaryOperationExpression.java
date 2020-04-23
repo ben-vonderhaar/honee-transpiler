@@ -44,7 +44,8 @@ public class UnaryOperationExpression extends Expression {
             } else {
                 // TODO find a cleaner way to do this, probably during number refactor stage
                 Literal valueToBeUsed = new IntegerLiteral(
-                        VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope()).toString());
+                        VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope())
+                                .toString());
                 VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
                 return valueToBeUsed;
             }

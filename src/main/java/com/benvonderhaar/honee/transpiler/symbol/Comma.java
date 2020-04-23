@@ -15,7 +15,7 @@ public class Comma extends Symbol implements Lexable {
 
 	@Override
 	public String toString() {
-		return ",";
+		return "COMMA";
 	}
 	
 }

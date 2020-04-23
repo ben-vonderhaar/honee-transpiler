@@ -406,12 +406,6 @@ public class Lexer {
 
 					List<Token> matchedTokens = new ArrayList<>();
 
-					if (reducer.getClass().equals(FunctionConstructReducer.class)
-							&& stack.size() > 4
-							&& stack.get(4).toString().equals("simplePublicNoopMethodWithSingleParameter")) {
-						System.out.println("checking function");
-					}
-
 					for (int i = 0; i <= stack.size() - tokenTypesOption.size(); i++) {
 
 						boolean firstTokenIsOptional = tokenIsOfType(tokenTypesOption.get(0), OptionalToken.class);

@@ -39,6 +39,6 @@ public class FunctionConstruct extends ConstructToken {
 
     @Override
     public String toString() {
-        return accessModifier.toString() + " " + (isStatic ? "static " : "") + name + " {...}";
+        return accessModifier.toString() + " " + (isStatic ? "static " : "") + functionDeclaration.toString() + " {...}";
     }
 }

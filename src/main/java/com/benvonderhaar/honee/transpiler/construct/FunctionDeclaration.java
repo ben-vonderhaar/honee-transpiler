@@ -27,4 +27,9 @@ public class FunctionDeclaration extends Token {
         this.name.setScope(scope);
         scope.addParameters(parameters);
     }
+
+    @Override
+    public String toString() {
+        return this.name.toString() + "(" + parameters.toString() + ")";
+    }
 }

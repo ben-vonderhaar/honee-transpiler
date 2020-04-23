@@ -4,4 +4,12 @@ public class Test {
         integer a = 1;
     }
 
+    simplePublicNoopMethodWithMultipleParameter(integer e, integer f) {
+        integer a = 1;
+    }
+
+    postincrementParameterAndAssign(integer g) {
+        integer a = g++;
+    }
+
 }
