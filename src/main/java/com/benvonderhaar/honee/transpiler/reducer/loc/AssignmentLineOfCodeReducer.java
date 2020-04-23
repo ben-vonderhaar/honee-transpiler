@@ -3,7 +3,7 @@ package com.benvonderhaar.honee.transpiler.reducer.loc;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
-import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 import com.benvonderhaar.honee.transpiler.symbol.Equal;

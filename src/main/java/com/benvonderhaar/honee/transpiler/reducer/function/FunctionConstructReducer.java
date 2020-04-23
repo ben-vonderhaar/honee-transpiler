@@ -3,6 +3,7 @@ package com.benvonderhaar.honee.transpiler.reducer.function;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.ClosureBody;
 import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
+import com.benvonderhaar.honee.transpiler.construct.FunctionDeclaration;
 import com.benvonderhaar.honee.transpiler.construct.OptionalToken;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
@@ -36,13 +37,13 @@ public class FunctionConstructReducer implements Reducer {
         return new FunctionConstruct(
             accessModifier,
             isStatic,
-            (VariableExpression) tokens[tokens.length - 4],
+            (FunctionDeclaration) tokens[tokens.length - 2],
             (ClosureBody) tokens[tokens.length - 1]);
     }
 
     @Override
     public Token[] getInputTokenTypes() {
-        return new Token[] { OPTIONAL_ACCESS_MODIFIER, OPTIONAL_STATIC, VARIABLE_EXPRESSION, L_PAREN, R_PAREN, CLOSURE_BODY};
+        return new Token[] { OPTIONAL_ACCESS_MODIFIER, OPTIONAL_STATIC, FUNCTION_DECLARATION, CLOSURE_BODY};
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.benvonderhaar.honee.transpiler.statement;
 
 import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
-import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Equal;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;

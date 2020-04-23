@@ -8,7 +8,17 @@ import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpr
 import com.benvonderhaar.honee.transpiler.reducer.expression.ParenthesisExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.PostUnaryOperationExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.PreUnaryOperationExpressionReducer;
-import com.benvonderhaar.honee.transpiler.reducer.function.*;
+import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.MultiLineClosureBodyReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.SingleLineClosureBodyReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.function.FoldFunctionIntoFunctionsReducer;
+import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.function.SingleFunctionClassReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.FoldVariableIntoVariablesReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.MultiParameterFunctionDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.SingleParameterFunctionDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.TwoVariableDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.loc.FoldLineOfCodeIntoLinesOfCodeReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.loc.TwoLinesOfCodeReducer;
 import com.benvonderhaar.honee.transpiler.reducer.loc.*;
 import com.benvonderhaar.honee.transpiler.reducer.operator.MinusSpaceMinusToPlusReducer;
 import com.benvonderhaar.honee.transpiler.reducer.operator.TwoEqualsToDoubleEqualsReducer;
@@ -35,6 +45,15 @@ public class ReducerUtil {
             = new AssignmentLineOfCodeReducer();
     public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
             = new ExpressionLineOfCodeReducer();
+
+    public static final SingleParameterFunctionDeclarationReducer SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER
+            = new SingleParameterFunctionDeclarationReducer();
+    public static final MultiParameterFunctionDeclarationReducer MULTI_PARAMETER_FUNCTION_DECLARATION_REDUCER
+            = new MultiParameterFunctionDeclarationReducer();
+    public static final TwoVariableDeclarationReducer TWO_VARIABLE_DECLARATION_REDUCER
+            = new TwoVariableDeclarationReducer();
+    public static final FoldVariableIntoVariablesReducer FOLD_VARIABLE_INTO_VARIABLES_REDUCER
+            = new FoldVariableIntoVariablesReducer();
 
     public static final TwoLinesOfCodeReducer TWO_LINES_OF_CODE_REDUCER
             = new TwoLinesOfCodeReducer();

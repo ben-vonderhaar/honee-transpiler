@@ -3,7 +3,7 @@ package com.benvonderhaar.honee.transpiler.registry;
 import java.util.*;
 
 import com.benvonderhaar.honee.transpiler.Scope;
-import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;

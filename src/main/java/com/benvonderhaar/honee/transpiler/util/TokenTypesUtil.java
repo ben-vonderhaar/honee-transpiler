@@ -3,13 +3,15 @@ package com.benvonderhaar.honee.transpiler.util;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.*;
 import com.benvonderhaar.honee.transpiler.expression.AnyExpression;
-import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.keyword.ClassKeyword;
 import com.benvonderhaar.honee.transpiler.keyword.StaticKeyword;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
+import com.benvonderhaar.honee.transpiler.reducer.listable.ListableTokenReducer;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.AnyType;
@@ -26,6 +28,7 @@ public class TokenTypesUtil {
     public static final LCurlyBracket L_CURLY_BRACKET = new LCurlyBracket("");
     public static final RCurlyBracket R_CURLY_BRACKET = new RCurlyBracket("");
     public static final Equal EQUAL = new Equal("");
+    public static final Comma COMMA = new Comma("");
     public static final Semicolon SEMICOLON = new Semicolon("");
     public static final Whitespace WHITESPACE = new Whitespace("");
 
@@ -36,6 +39,7 @@ public class TokenTypesUtil {
     public static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression("");
     public static final AssignmentStatement ASSIGNMENT_STATEMENT = new AssignmentStatement("");
     public static final VariableDeclaration VARIABLE_DECLARATION = new VariableDeclaration("");
+    public static final TokenList<VariableDeclaration> LIST_OF_VARIABLE_DECLARATIONS = new TokenList<>(VARIABLE_DECLARATION);
 
     public static final BinaryOperator ANY_BINARY_OPERATOR = new BinaryOperator("");
     public static final BinaryOperator MINUS_BINARY_OPERATOR = new BinaryOperator("-");
@@ -52,12 +56,25 @@ public class TokenTypesUtil {
     public static final LineOfCode LINE_OF_CODE = new LineOfCode(ANY_EXPRESSION);
     public static final TokenList<LineOfCode> LINES_OF_CODE = new TokenList<>(LINE_OF_CODE);
 
+    public static final FunctionDeclaration FUNCTION_DECLARATION = new FunctionDeclaration(VARIABLE_EXPRESSION, VARIABLE_DECLARATION);
     public static final ClosureBody CLOSURE_BODY = new ClosureBody(LINE_OF_CODE);
 
     public static final OptionalToken<StaticKeyword> OPTIONAL_STATIC = new OptionalToken<>(STATIC);
     public static final OptionalToken<AccessModifier> OPTIONAL_ACCESS_MODIFIER = new OptionalToken<>(ANY_ACCESS_MODIFIER);
 
+
+    public static List<List<Token>> getAllTokenListOptions(Reducer reducer) {
+
+        if (reducer.getClass().isAssignableFrom(ListableTokenReducer.class)) {
+            return ((ListableTokenReducer) reducer).getListableTokenListOptions();
+        } else {
+            return getAllTokenListOptions(reducer.getInputTokenTypes());
+        }
+    }
+
     public static List<List<Token>> getAllTokenListOptions(Token[] tokens) {
+
+
         Set<List<Token>> tokenListOptions = new HashSet<>();
 
         for (int i = 0; i < tokens.length; i++) {

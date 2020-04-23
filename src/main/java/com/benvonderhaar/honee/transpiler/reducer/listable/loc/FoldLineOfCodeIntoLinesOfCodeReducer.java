@@ -1,4 +1,4 @@
-package com.benvonderhaar.honee.transpiler.reducer.loc;
+package com.benvonderhaar.honee.transpiler.reducer.listable.loc;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.LineOfCode;

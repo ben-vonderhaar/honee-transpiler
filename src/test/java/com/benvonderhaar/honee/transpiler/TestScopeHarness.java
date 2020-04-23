@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class TestScopeHarness {
 
-    private Scope scope;
+    private ClosureBody scope;
 
     public TestScopeHarness(String... locs) {
 
@@ -53,7 +53,7 @@ public class TestScopeHarness {
         this.scope.evaluate();
     }
 
-    public Scope getScope() {
+    public ClosureBody getScope() {
         return this.scope;
     }
 }

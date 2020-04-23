@@ -1,7 +1,7 @@
 public class Test {
 
-    simplePublicNoopMethodWithParameter(integer f) {
-
+    simplePublicNoopMethodWithSingleParameter(integer f) {
+        integer a = 1;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.benvonderhaar.honee.transpiler.reducer.function;
+package com.benvonderhaar.honee.transpiler.reducer.listable.closurebody;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.ClosureBody;

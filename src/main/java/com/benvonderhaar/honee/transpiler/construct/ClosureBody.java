@@ -32,6 +32,11 @@ public class ClosureBody extends ConstructToken implements Scope {
     }
 
     @Override
+    public void addParameters(TokenList<VariableDeclaration> parameters) {
+        // TODO
+    }
+
+    @Override
     public String toString() {
         return "{ " + linesOfCode.toString() + " }";
     }

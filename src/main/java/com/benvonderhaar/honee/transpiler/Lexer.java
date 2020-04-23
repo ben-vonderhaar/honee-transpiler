@@ -15,6 +15,10 @@ import com.benvonderhaar.honee.transpiler.literal.*;
 import com.benvonderhaar.honee.transpiler.operator.*;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.FoldVariableIntoVariablesReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.MultiParameterFunctionDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.SingleParameterFunctionDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.TwoVariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.registry.LexableTokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
@@ -56,6 +60,7 @@ public class Lexer {
 		tokenTypes.add(VariableExpression.class);
 
 		tokenTypes.add(Equal.class);
+		tokenTypes.add(Comma.class);
 		tokenTypes.add(LParen.class);
 		tokenTypes.add(RParen.class);
 		tokenTypes.add(LCurlyBracket.class);
@@ -246,6 +251,38 @@ public class Lexer {
 				continue;
 			}
 
+			if (reduce(parserStack, lookahead, SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced single parameter function declaration");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, MULTI_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced multiple parameter function declaration");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, TWO_VARIABLE_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced two variable declarations into tokenlist");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, FOLD_VARIABLE_INTO_VARIABLES_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Folded variable into list of variable declarations");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
 			if (reduce(parserStack, lookahead, SINGLE_LINE_CLOSURE_BODY_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced single LOC closure body");
@@ -363,15 +400,15 @@ public class Lexer {
 
 		Class<? extends Token> outputClass = reducer.getOutputClass();
 
-		List<TokenTypesAndMatchedTokensTuple> matches = getAllTokenListOptions(reducer.getInputTokenTypes()).stream()
+		List<TokenTypesAndMatchedTokensTuple> matches = getAllTokenListOptions(reducer).stream()
 				.sorted((option1, option2) -> option2.size() - option1.size())
 				.map(tokenTypesOption -> {
 
 					List<Token> matchedTokens = new ArrayList<>();
 
 					if (reducer.getClass().equals(FunctionConstructReducer.class)
-							&& stack.size() > 6
-							&& stack.get(6).toString().equals("publicMethod")) {
+							&& stack.size() > 4
+							&& stack.get(4).toString().equals("simplePublicNoopMethodWithSingleParameter")) {
 						System.out.println("checking function");
 					}
 

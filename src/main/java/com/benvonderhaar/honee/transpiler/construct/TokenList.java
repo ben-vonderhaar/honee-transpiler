@@ -37,6 +37,7 @@ public class TokenList<T extends Token> extends ConstructToken {
 
     @Override
     public String toString() {
+
         return tokenList.toString();
     }
 }

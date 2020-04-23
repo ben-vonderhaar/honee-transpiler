@@ -1,7 +1,7 @@
 package com.benvonderhaar.honee.transpiler.reducer;
 
 import com.benvonderhaar.honee.transpiler.Token;
-import com.benvonderhaar.honee.transpiler.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.type.Type;
 

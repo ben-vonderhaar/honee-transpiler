@@ -1,5 +1,7 @@
-package com.benvonderhaar.honee.transpiler;
+package com.benvonderhaar.honee.transpiler.construct;
 
+import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.type.FunctionType;
@@ -40,6 +42,11 @@ public class VariableDeclaration extends Token implements Lexable {
 
     @Override
     public String toString() {
-        return this.type.toString() + " " + this.getVariable().getName();
+
+        if (null == this.type || null == this.variable) {
+            return "[variable declaration]";
+        }
+
+        return this.type.toString() + " " + this.variable.getName();
     }
 }
