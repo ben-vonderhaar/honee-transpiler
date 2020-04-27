@@ -7,7 +7,10 @@ import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.type.VariableType;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
+
+import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.VARIABLE_TYPE;
 
 public class UnaryOperationExpression extends Expression {
 
@@ -35,25 +38,21 @@ public class UnaryOperationExpression extends Expression {
     @Override
     public Literal evaluate() {
 
-        try {
-            VariableDeclaration v = VariableRegistry.getVariableInScopeByName(exp.getVariable().getName(), exp.getScope());
+        VariableDeclaration v = VariableRegistry.getVariableInScopeByName(exp.getVariable().getName(),
+                VARIABLE_TYPE, exp.getScope());
 
-            if (isPreUnaryOperator) {
-                VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
-                return VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope());
-            } else {
-                // TODO find a cleaner way to do this, probably during number refactor stage
-                Literal valueToBeUsed = new IntegerLiteral(
-                        VariableRegistry.getVariableValue(exp.getVariable().getName(), exp.getScope())
-                                .toString());
-                VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
-                return valueToBeUsed;
-            }
-        } catch (HoneeException e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
+        if (isPreUnaryOperator) {
+            VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
+            return VariableRegistry.getVariableValue(exp.getVariable().getName(), v.getType(), exp.getScope());
+        } else {
+            // TODO find a cleaner way to do this, probably during number refactor stage
+            Literal valueToBeUsed = new IntegerLiteral(
+                    VariableRegistry.getVariableValue(exp.getVariable().getName(), v.getType(), exp.getScope())
+                            .toString());
+            VariableRegistry.setVariableValue(v, op.evaluate(exp.getScope(), exp), exp.getScope());
+            return valueToBeUsed;
         }
+
     }
 
     @Override

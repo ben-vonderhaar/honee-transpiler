@@ -130,6 +130,10 @@ public class Lexer {
 
 							tokens.add(UnaryOperator.getUnaryOperator(match));
 
+						} else if (tokenType.equals(BinaryOperator.class)) {
+
+							tokens.add(BinaryOperator.getBinaryOperator(match));
+
 						} else {
 
 							tokens.add((Token) LexableTokenTypeRegistry.getTokenType(tokenType));

@@ -13,6 +13,8 @@ import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.util.TriFunction;
 
+import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
+
 public class BinaryOperator extends Operator implements Lexable {
 
 	private final String operator;
@@ -55,7 +57,12 @@ public class BinaryOperator extends Operator implements Lexable {
 				this.operation = BinaryOperator::minus;
 				break;
 		}
-		
+
+	}
+
+	public static BinaryOperator getBinaryOperator(String operator) {
+
+		return new BinaryOperator(operator);
 	}
 
 	@Override

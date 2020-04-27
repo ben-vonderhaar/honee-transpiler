@@ -38,10 +38,9 @@ public class AssignmentStatement extends Statement {
 			System.exit(1);
 		}
 
+
 		VariableRegistry.setVariableValue(this.variableDeclaration, expression.evaluate(), this.scope);
 
-		// TODO ensure type consistency
-		// TODO assign to variable registry in proper scope
 	}
 
 	@Override

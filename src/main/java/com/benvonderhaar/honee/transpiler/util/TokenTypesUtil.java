@@ -15,6 +15,7 @@ import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.AnyType;
+import com.benvonderhaar.honee.transpiler.type.VariableType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class TokenTypesUtil {
     public static final Whitespace WHITESPACE = new Whitespace("");
 
     public static final AnyType ANY_TYPE = new AnyType();
+    public static final VariableType VARIABLE_TYPE = new VariableType("");
     public static final AccessModifier ANY_ACCESS_MODIFIER = new AccessModifier("");
 
     public static final AnyExpression ANY_EXPRESSION = new AnyExpression();

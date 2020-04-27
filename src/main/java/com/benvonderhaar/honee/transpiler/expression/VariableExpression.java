@@ -7,6 +7,7 @@ import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.type.VariableType;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class VariableExpression extends Expression implements Lexable {
@@ -28,13 +29,7 @@ public class VariableExpression extends Expression implements Lexable {
 
 	@Override
 	public Literal evaluate() {
-		try {
-			return VariableRegistry.getVariableValue(this.variable.getName(), this.scope);
-		} catch (HoneeException e) {
-			e.printStackTrace();
-			System.exit(1);
-			return null;
-		}
+		return VariableRegistry.getVariableValue(this.variable.getName(), new VariableType(""), this.scope);
 	}
 
 	@Override

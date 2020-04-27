@@ -1,6 +1,6 @@
 package com.benvonderhaar.honee.transpiler.type;
 
-public class BooleanType extends Type {
+public class BooleanType extends VariableType {
 
 	public BooleanType(String booleanType) {
 		super(booleanType);

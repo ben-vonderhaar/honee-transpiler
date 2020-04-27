@@ -49,4 +49,18 @@ public class VariableDeclaration extends Token implements Lexable {
 
         return this.type.toString() + " " + this.variable.getName();
     }
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (!(other instanceof VariableDeclaration)) {
+            return false;
+        }
+
+        VariableDeclaration otherVariableDeclaration = (VariableDeclaration) other;
+
+        return this.type.equals(otherVariableDeclaration.type)
+                && this.variable.equals(otherVariableDeclaration.getVariable());
+
+    }
 }

@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.stream.Collectors;
 
+import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.VARIABLE_TYPE;
 import static org.junit.Assert.assertEquals;
 
 public class TestFunctionEvaluation {
@@ -34,7 +35,7 @@ public class TestFunctionEvaluation {
     }
 
     @Test
-    public void testParseClassWithMethodsWithParameters() throws Throwable {
+    public void testParseClassWithMethodsWithParameter() throws Throwable {
         BufferedReader reader =
                 new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
 
@@ -47,7 +48,7 @@ public class TestFunctionEvaluation {
                 "postincrementParameterAndAssign", "function");
 
         VariableRegistry.setVariableValue(
-                VariableRegistry.getVariableInScopeByName("g", postincrementParameterAndAssignScope),
+                VariableRegistry.getVariableInScopeByName("g", VARIABLE_TYPE, postincrementParameterAndAssignScope),
                 new IntegerLiteral("5"),
                 postincrementParameterAndAssignScope);
 
@@ -60,5 +61,34 @@ public class TestFunctionEvaluation {
 
         //   System.out.println("b = " + VariableRegistry.getVariableValue("b"));
         //   System.out.println("c = " + VariableRegistry.getVariableValue("c"));
+    }
+
+    @Test
+    public void testParseClassWithMethodsWithParameters() throws Throwable {
+        BufferedReader reader =
+                new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
+
+        String fileContents = reader.lines()
+                .collect(Collectors.joining("\n"));
+
+        Lexer.processHnFileContents(fileContents);
+
+        ClosureBody addParametersAndAssignScope = (ClosureBody) VariableRegistry.getScope(
+                "addParametersAndAssign", "function");
+
+        VariableRegistry.setVariableValue(
+                VariableRegistry.getVariableInScopeByName("g", VARIABLE_TYPE, addParametersAndAssignScope),
+                new IntegerLiteral("5"),
+                addParametersAndAssignScope);
+        VariableRegistry.setVariableValue(
+                VariableRegistry.getVariableInScopeByName("h", VARIABLE_TYPE, addParametersAndAssignScope),
+                new IntegerLiteral("8"),
+                addParametersAndAssignScope);
+
+        // FIXME Causes a NPE when trying to get value of g even after injecting values above
+        addParametersAndAssignScope.evaluate();
+
+        assertEquals(Integer.valueOf(13), VariableRegistry
+                .getVariableValueAsInteger("a", addParametersAndAssignScope).get());
     }
 }

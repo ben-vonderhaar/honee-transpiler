@@ -33,36 +33,25 @@ public class UnaryOperator extends Operator implements Lexable {
 
     private static Expression increment(Expression expression, Scope scope) {
 
-        try {
-            VariableDeclaration v = VariableRegistry.getVariableInScopeByName(
-                    ((VariableExpression) expression).getVariable().getName(), scope);
-            IntegerLiteral variableValue = (IntegerLiteral) VariableRegistry.getVariableValue(
-                    ((VariableExpression) expression).getVariable().getName(), scope);
-            VariableRegistry.setVariableValue(v, variableValue.increment(), scope);
+        VariableDeclaration v = VariableRegistry.getVariableInScopeByName(
+                ((VariableExpression) expression).getVariable().getName(), VARIABLE_TYPE, scope);
+        IntegerLiteral variableValue = (IntegerLiteral) VariableRegistry.getVariableValue(
+                ((VariableExpression) expression).getVariable().getName(), VARIABLE_TYPE, scope);
+        VariableRegistry.setVariableValue(v, variableValue.increment(), scope);
 
-            return expression;
-        } catch (HoneeException e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
+        return expression;
     }
 
     private static Expression decrement(Expression expression, Scope scope) {
 
-        try {
-            VariableDeclaration v = VariableRegistry.getVariableInScopeByName(
-                    ((VariableExpression) expression).getVariable().getName(), scope);
-            IntegerLiteral variableValue = (IntegerLiteral) VariableRegistry.getVariableValue(
-                    ((VariableExpression) expression).getVariable().getName(), scope);
-            VariableRegistry.setVariableValue(v, variableValue.decrement(), scope);
+        VariableDeclaration v = VariableRegistry.getVariableInScopeByName(
+                ((VariableExpression) expression).getVariable().getName(), VARIABLE_TYPE, scope);
+        IntegerLiteral variableValue = (IntegerLiteral) VariableRegistry.getVariableValue(
+                ((VariableExpression) expression).getVariable().getName(), VARIABLE_TYPE, scope);
+        VariableRegistry.setVariableValue(v, variableValue.decrement(), scope);
 
-            return expression;
-        } catch (HoneeException e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
+        return expression;
+
     }
 
     public static UnaryOperator getUnaryOperator(String operator) {

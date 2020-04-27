@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.symbol;
 
 import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.construct.ConstructToken;
+import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
@@ -30,10 +31,6 @@ public class Variable extends Symbol {
 		this.scope = scope;
 	}
 
-	public Literal getValue() throws HoneeException {
-		return VariableRegistry.getVariableValue(this.name, scope);
-	}
-
 	public String getName() {
 		return this.name;
 	}
@@ -41,6 +38,18 @@ public class Variable extends Symbol {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+
+		if (!(other instanceof Variable)) {
+			return false;
+		}
+
+		Variable otherVariable = (Variable) other;
+
+		return this.name.equals(otherVariable.name);
 	}
 
 }
