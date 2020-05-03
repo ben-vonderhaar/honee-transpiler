@@ -9,6 +9,8 @@ import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -20,29 +22,20 @@ import static org.junit.Assert.assertEquals;
 
 public class TestFunctionEvaluation {
 
-    @Test
-    public void test() throws HoneeException {
+    BufferedReader reader;
 
-        TestScopeHarness harness = new TestScopeHarness("integer a = 1;", "integer b = --a;");
-        harness.evaluateScope();
-
-        assertEquals(Integer.valueOf(0), VariableRegistry
-                .getVariableValueAsInteger("a", harness.getScope()).get());
-        assertEquals(Integer.valueOf(0), VariableRegistry
-                .getVariableValueAsInteger("b", harness.getScope()).get());
-
-        //new FunctionConstruct(AccessModifier.publicKeyword(), false, new FunctionDeclaration(""), harness.getScope());
-    }
-
-    @Test
-    public void testParseClassWithMethodsWithParameter() throws Throwable {
-        BufferedReader reader =
-                new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
+    @Before
+    public void setup() throws Throwable {
+        reader = new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
 
         String fileContents = reader.lines()
                 .collect(Collectors.joining("\n"));
 
         Lexer.processHnFileContents(fileContents);
+    }
+
+    @Test
+    public void testParseClassWithMethodsWithParameter() throws Throwable {
 
         ClosureBody postincrementParameterAndAssignScope = (ClosureBody) VariableRegistry.getScope(
                 "postincrementParameterAndAssign", "function");
@@ -58,19 +51,10 @@ public class TestFunctionEvaluation {
                 .getVariableValueAsInteger("g", postincrementParameterAndAssignScope).get());
         assertEquals(Integer.valueOf(5), VariableRegistry
                 .getVariableValueAsInteger("a", postincrementParameterAndAssignScope).get());
-
-        reader.close();
     }
 
     @Test
     public void testParseClassWithMethodsWithParameters() throws Throwable {
-        BufferedReader reader =
-                new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
-
-        String fileContents = reader.lines()
-                .collect(Collectors.joining("\n"));
-
-        Lexer.processHnFileContents(fileContents);
 
         ClosureBody addParametersAndAssignScope = (ClosureBody) VariableRegistry.getScope(
                 "addParametersAndAssign", "function");
@@ -89,7 +73,10 @@ public class TestFunctionEvaluation {
 
         assertEquals(Integer.valueOf(13), VariableRegistry
                 .getVariableValueAsInteger("a", addParametersAndAssignScope).get());
+    }
 
+    @After
+    public void teardown() throws Exception {
         reader.close();
     }
 }

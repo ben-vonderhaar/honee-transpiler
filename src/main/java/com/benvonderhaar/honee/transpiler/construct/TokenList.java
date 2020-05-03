@@ -11,6 +11,10 @@ public class TokenList<T extends Token> extends ConstructToken {
 
     private List<T> tokenList = new ArrayList<>();
 
+    public TokenList(Class<? extends Token> t1) {
+        listType = t1;
+    }
+
     public TokenList(T t1) {
         listType = t1.getClass();
         tokenList.add(t1);

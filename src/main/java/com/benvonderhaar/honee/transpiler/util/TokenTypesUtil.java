@@ -49,6 +49,7 @@ public class TokenTypesUtil {
 
     public static final AnyExpression ANY_EXPRESSION = new AnyExpression();
     public static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression("");
+    public static final OptionalToken<VariableExpression> OPTIONAL_VARIABLE_EXPRESSION = new OptionalToken<>(VARIABLE_EXPRESSION);
     public static final AssignmentStatement ASSIGNMENT_STATEMENT = new AssignmentStatement("");
     public static final VariableDeclaration VARIABLE_DECLARATION = new VariableDeclaration("");
     public static final TokenList<VariableDeclaration> LIST_OF_VARIABLE_DECLARATIONS = new TokenList<>(VARIABLE_DECLARATION);
@@ -63,11 +64,13 @@ public class TokenTypesUtil {
     public static final ClassKeyword CLASS = new ClassKeyword("");
 
     public static final FunctionConstruct FUNCTION = new FunctionConstruct("");
-    public static final TokenList<FunctionConstruct> LIST_OF_FUNCTIONS = new TokenList<>(FUNCTION);
+    public static final ClassBodyConstructToken CLASS_BODY_CONSTRUCT_TOKEN = new ClassBodyConstructToken();
+    public static final TokenList<ClassBodyConstructToken> LIST_OF_CLASS_BODY_CONSTRUCT_TOKEN = new TokenList<>(CLASS_BODY_CONSTRUCT_TOKEN);
 
     public static final LineOfCode LINE_OF_CODE = new LineOfCode(EXPRESSION);
     public static final TokenList<LineOfCode> LINES_OF_CODE = new TokenList<>(LINE_OF_CODE);
 
+    public static final ConstructorDeclaration CONSTRUCTOR_DECLARATION = new ConstructorDeclaration(VARIABLE_DECLARATION);
     public static final FunctionDeclaration FUNCTION_DECLARATION = new FunctionDeclaration(VARIABLE_EXPRESSION, VARIABLE_DECLARATION);
     public static final ClosureBody CLOSURE_BODY = new ClosureBody(LINE_OF_CODE);
 

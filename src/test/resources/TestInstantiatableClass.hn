@@ -1,0 +1,11 @@
+public class Test {
+
+    () {
+        integer a = 0;
+    }
+
+    (integer a) {
+        integer b = a;
+    }
+
+}

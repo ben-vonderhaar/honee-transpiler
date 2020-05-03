@@ -10,7 +10,6 @@ import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.type.FunctionType;
 import com.benvonderhaar.honee.transpiler.type.IntegerType;
 import com.benvonderhaar.honee.transpiler.type.Type;
-import com.benvonderhaar.honee.transpiler.type.VariableType;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class VariableRegistry {

@@ -1,6 +1,7 @@
 package com.benvonderhaar.honee.transpiler.reducer.clazz;
 
 import com.benvonderhaar.honee.transpiler.Token;
+import com.benvonderhaar.honee.transpiler.construct.ClassBodyConstructToken;
 import com.benvonderhaar.honee.transpiler.construct.ClassConstruct;
 import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
@@ -21,7 +22,7 @@ public class ClassConstructReducer implements Reducer {
         if (!Reducer.super.check(tokens)) {
             return false;
         } else {
-            return ReducerUtil.matchesTokenListType(FunctionConstruct.class, tokens[4]);
+            return ReducerUtil.matchesTokenListType(ClassBodyConstructToken.class, tokens[4]);
         }
 
     }
@@ -31,13 +32,13 @@ public class ClassConstructReducer implements Reducer {
         return new ClassConstruct(
                 (AccessModifier) tokens[0],
                 (VariableExpression) tokens[2],
-                (TokenList<FunctionConstruct>) tokens[4]);
+                (TokenList<ClassBodyConstructToken>) tokens[4]);
     }
 
     @Override
     public Token[] getInputTokenTypes() {
         return new Token[] { ANY_ACCESS_MODIFIER, CLASS, VARIABLE_EXPRESSION, L_CURLY_BRACKET,
-        LIST_OF_FUNCTIONS, R_CURLY_BRACKET};
+        LIST_OF_CLASS_BODY_CONSTRUCT_TOKEN, R_CURLY_BRACKET};
     }
 
     @Override

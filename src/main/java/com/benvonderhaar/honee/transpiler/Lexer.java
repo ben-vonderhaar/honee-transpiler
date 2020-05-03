@@ -14,11 +14,6 @@ import com.benvonderhaar.honee.transpiler.keyword.*;
 import com.benvonderhaar.honee.transpiler.literal.*;
 import com.benvonderhaar.honee.transpiler.operator.*;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
-import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.FoldVariableIntoVariablesReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.MultiParameterFunctionDeclarationReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.SingleParameterFunctionDeclarationReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.TwoVariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.registry.LexableTokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
@@ -255,6 +250,14 @@ public class Lexer {
 				continue;
 			}
 
+			if (reduce(parserStack, lookahead, NO_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced no parameter function declaration");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
 			if (reduce(parserStack, lookahead, SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced single parameter function declaration");
@@ -319,9 +322,9 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead, FOLD_FUNCTION_INTO_FUNCTIONS_REDUCER).bool()) {
+			if (reduce(parserStack, lookahead, FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER).bool()) {
 				didReduction = true;
-				System.out.println("Folded function into existing functions");
+				System.out.println("Folded class body construct into existing class body constructs");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
@@ -329,13 +332,21 @@ public class Lexer {
 
 			if (reduce(parserStack, lookahead, FUNCTION_CONSTRUCT_REDUCER).bool()) {
 				didReduction = true;
-				System.out.println("Reduced function definition");
+				System.out.println("Reduced class body construct definition");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead, SINGLE_FUNCTION_CLASS_REDUCER).bool()) {
+			if (reduce(parserStack, lookahead, CONSTRUCTOR_CONSTRUCT_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced constructor definition");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, SINGLE_CLASS_BODY_CONSTRUCT_CLASS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced single function to list of functions");
 				System.out.println("Parser Stack: " + parserStack);

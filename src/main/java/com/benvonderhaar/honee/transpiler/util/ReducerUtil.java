@@ -8,15 +8,13 @@ import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpr
 import com.benvonderhaar.honee.transpiler.reducer.expression.ParenthesisExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.PostUnaryOperationExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.PreUnaryOperationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.function.ConstructorConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.MultiLineClosureBodyReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.SingleLineClosureBodyReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.function.FoldFunctionIntoFunctionsReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.function.FoldClassBodyConstructIntoClassBodyConstructsReducer;
 import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.function.SingleFunctionClassReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.FoldVariableIntoVariablesReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.MultiParameterFunctionDeclarationReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.SingleParameterFunctionDeclarationReducer;
-import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.TwoVariableDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.function.SingleClassBodyConstructClassReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.*;
 import com.benvonderhaar.honee.transpiler.reducer.listable.loc.FoldLineOfCodeIntoLinesOfCodeReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.loc.TwoLinesOfCodeReducer;
 import com.benvonderhaar.honee.transpiler.reducer.loc.*;
@@ -46,6 +44,8 @@ public class ReducerUtil {
     public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
             = new ExpressionLineOfCodeReducer();
 
+    public static final NoParameterFunctionDeclarationReducer NO_PARAMETER_FUNCTION_DECLARATION_REDUCER
+            = new NoParameterFunctionDeclarationReducer();
     public static final SingleParameterFunctionDeclarationReducer SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER
             = new SingleParameterFunctionDeclarationReducer();
     public static final MultiParameterFunctionDeclarationReducer MULTI_PARAMETER_FUNCTION_DECLARATION_REDUCER
@@ -68,10 +68,12 @@ public class ReducerUtil {
             = new ClassConstructReducer();
     public static final FunctionConstructReducer FUNCTION_CONSTRUCT_REDUCER
             = new FunctionConstructReducer();
-    public static final SingleFunctionClassReducer SINGLE_FUNCTION_CLASS_REDUCER
-            = new SingleFunctionClassReducer();
-    public static final FoldFunctionIntoFunctionsReducer FOLD_FUNCTION_INTO_FUNCTIONS_REDUCER
-            = new FoldFunctionIntoFunctionsReducer();
+    public static final ConstructorConstructReducer CONSTRUCTOR_CONSTRUCT_REDUCER
+            = new ConstructorConstructReducer();
+    public static final SingleClassBodyConstructClassReducer SINGLE_CLASS_BODY_CONSTRUCT_CLASS_REDUCER
+            = new SingleClassBodyConstructClassReducer();
+    public static final FoldClassBodyConstructIntoClassBodyConstructsReducer FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER
+            = new FoldClassBodyConstructIntoClassBodyConstructsReducer();
 
     public static boolean matchesTokenListType(Class<? extends Token> tokenType, Token token) {
 

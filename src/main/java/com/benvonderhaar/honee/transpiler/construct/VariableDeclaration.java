@@ -6,6 +6,7 @@ import com.benvonderhaar.honee.transpiler.Scopeable;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.type.ClassType;
 import com.benvonderhaar.honee.transpiler.type.FunctionType;
 import com.benvonderhaar.honee.transpiler.type.Type;
 
@@ -27,6 +28,10 @@ public class VariableDeclaration extends Token implements Lexable, Scopeable {
     public static VariableDeclaration newFunctionDeclaration(VariableExpression name) {
         // TODO create a TypeUtil class a la ReducerUtil
         return new VariableDeclaration(new FunctionType(""), name);
+    }
+
+    public static VariableDeclaration newClassDeclaration(VariableExpression name) {
+        return new VariableDeclaration(new ClassType(""), name);
     }
 
     @Override

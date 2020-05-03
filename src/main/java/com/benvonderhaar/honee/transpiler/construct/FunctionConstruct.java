@@ -5,7 +5,7 @@ import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public class FunctionConstruct extends ConstructToken {
+public class FunctionConstruct extends ClassBodyConstructToken {
 
     private AccessModifier accessModifier;
     private boolean isStatic;
