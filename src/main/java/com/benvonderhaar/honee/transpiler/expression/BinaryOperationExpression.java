@@ -31,6 +31,8 @@ public class BinaryOperationExpression extends Expression {
 		}
 
 		this.scope = scope;
+		this.lhs.setScope(scope);
+		this.rhs.setScope(scope);
 	}
 
 	@Override

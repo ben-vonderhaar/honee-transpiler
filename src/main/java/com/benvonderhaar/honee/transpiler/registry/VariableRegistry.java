@@ -46,6 +46,7 @@ public class VariableRegistry {
 		scopeVariables.add(scopedTypedVariableDeclarationTuple);
 		variablesInScopeMap.put(scope, scopeVariables);
 
+		variableDeclaration.setScope(scope);
 	}
 
 	public static void setVariableValue(VariableDeclaration variableDeclaration, Literal l, Scope scope) {

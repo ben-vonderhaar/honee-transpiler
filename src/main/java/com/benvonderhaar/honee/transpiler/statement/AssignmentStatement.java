@@ -1,6 +1,7 @@
 package com.benvonderhaar.honee.transpiler.statement;
 
 import com.benvonderhaar.honee.transpiler.Scope;
+import com.benvonderhaar.honee.transpiler.Scopeable;
 import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
@@ -9,7 +10,7 @@ import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
-public class AssignmentStatement extends Statement {
+public class AssignmentStatement extends Statement implements Scopeable {
 
 	private Type type;
 	private VariableDeclaration variableDeclaration;
@@ -48,6 +49,7 @@ public class AssignmentStatement extends Statement {
 		return type.toString() + " " + variable.toString() + " = " + expression.toString();
 	}
 
+	@Override
 	public void setScope(Scope scope) {
 
 		if (null != this.scope) {

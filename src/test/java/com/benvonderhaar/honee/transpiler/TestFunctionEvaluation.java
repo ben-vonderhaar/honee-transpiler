@@ -59,8 +59,7 @@ public class TestFunctionEvaluation {
         assertEquals(Integer.valueOf(5), VariableRegistry
                 .getVariableValueAsInteger("a", postincrementParameterAndAssignScope).get());
 
-        //   System.out.println("b = " + VariableRegistry.getVariableValue("b"));
-        //   System.out.println("c = " + VariableRegistry.getVariableValue("c"));
+        reader.close();
     }
 
     @Test
@@ -90,5 +89,7 @@ public class TestFunctionEvaluation {
 
         assertEquals(Integer.valueOf(13), VariableRegistry
                 .getVariableValueAsInteger("a", addParametersAndAssignScope).get());
+
+        reader.close();
     }
 }

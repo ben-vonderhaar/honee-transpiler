@@ -2,27 +2,29 @@ package com.benvonderhaar.honee.transpiler.construct;
 
 import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.expression.AnyExpression;
+import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.UnaryOperationExpression;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 
 public class LineOfCode extends ConstructToken {
 
     private AssignmentStatement assignmentStatement;
-    private AnyExpression expression;
+    private Expression expression;
 
     public LineOfCode(AssignmentStatement assignmentStatement) {
         this.assignmentStatement = assignmentStatement;
     }
 
-    public LineOfCode(AnyExpression expression) {
+    public LineOfCode(Expression expression) {
         this.expression = expression;
     }
 
     public void setScope(Scope scope) {
+
         if (null != assignmentStatement) {
-            assignmentStatement.setScope(scope);
-        } else if (this.expression.getClass().isAssignableFrom(UnaryOperationExpression.class)) {
-            ((UnaryOperationExpression) this.expression).setScope(scope);
+            this.assignmentStatement.setScope(scope);
+        } else {
+            this.expression.setScope(scope);
         }
     }
 
@@ -45,9 +47,7 @@ public class LineOfCode extends ConstructToken {
         if (null != this.assignmentStatement) {
             this.assignmentStatement.evaluate();
         } else if (null != this.expression) {
-            if (this.expression.getClass().isAssignableFrom(UnaryOperationExpression.class)) {
-                ((UnaryOperationExpression) this.expression).evaluate();
-            }
+            this.expression.evaluate();
         }
     }
 }

@@ -1,5 +1,9 @@
 public class Test {
 
+    addParametersAndAssign(integer g, integer h) {
+        integer a = g+h;
+    }
+
     simplePublicNoopMethodWithSingleParameter(integer f) {
         integer a = 1;
     }
@@ -10,10 +14,6 @@ public class Test {
 
     postincrementParameterAndAssign(integer g) {
         integer a = g++;
-    }
-
-    addParametersAndAssign(integer g, integer h) {
-        integer a = g+h;
     }
 
 }

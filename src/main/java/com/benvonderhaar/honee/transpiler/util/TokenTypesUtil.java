@@ -4,10 +4,12 @@ import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.*;
 import com.benvonderhaar.honee.transpiler.expression.AnyExpression;
 import com.benvonderhaar.honee.transpiler.construct.VariableDeclaration;
+import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.keyword.ClassKeyword;
 import com.benvonderhaar.honee.transpiler.keyword.StaticKeyword;
+import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 import com.benvonderhaar.honee.transpiler.reducer.listable.ListableTokenReducer;
@@ -37,6 +39,14 @@ public class TokenTypesUtil {
     public static final VariableType VARIABLE_TYPE = new VariableType("");
     public static final AccessModifier ANY_ACCESS_MODIFIER = new AccessModifier("");
 
+    // TODO clean up?
+    public static final Expression EXPRESSION = new Expression() {
+        @Override
+        public Literal evaluate() {
+            return null;
+        }
+    };
+
     public static final AnyExpression ANY_EXPRESSION = new AnyExpression();
     public static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression("");
     public static final AssignmentStatement ASSIGNMENT_STATEMENT = new AssignmentStatement("");
@@ -55,7 +65,7 @@ public class TokenTypesUtil {
     public static final FunctionConstruct FUNCTION = new FunctionConstruct("");
     public static final TokenList<FunctionConstruct> LIST_OF_FUNCTIONS = new TokenList<>(FUNCTION);
 
-    public static final LineOfCode LINE_OF_CODE = new LineOfCode(ANY_EXPRESSION);
+    public static final LineOfCode LINE_OF_CODE = new LineOfCode(EXPRESSION);
     public static final TokenList<LineOfCode> LINES_OF_CODE = new TokenList<>(LINE_OF_CODE);
 
     public static final FunctionDeclaration FUNCTION_DECLARATION = new FunctionDeclaration(VARIABLE_EXPRESSION, VARIABLE_DECLARATION);

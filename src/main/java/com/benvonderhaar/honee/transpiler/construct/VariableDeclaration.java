@@ -1,13 +1,15 @@
 package com.benvonderhaar.honee.transpiler.construct;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
+import com.benvonderhaar.honee.transpiler.Scope;
+import com.benvonderhaar.honee.transpiler.Scopeable;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
 import com.benvonderhaar.honee.transpiler.type.FunctionType;
 import com.benvonderhaar.honee.transpiler.type.Type;
 
-public class VariableDeclaration extends Token implements Lexable {
+public class VariableDeclaration extends Token implements Lexable, Scopeable {
 
     private Type type;
     private Variable variable;
@@ -62,5 +64,10 @@ public class VariableDeclaration extends Token implements Lexable {
         return this.type.equals(otherVariableDeclaration.type)
                 && this.variable.equals(otherVariableDeclaration.getVariable());
 
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.variable.setScope(scope);
     }
 }

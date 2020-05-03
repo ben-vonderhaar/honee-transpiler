@@ -4,6 +4,8 @@ import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
+import java.util.Objects;
+
 public class ClosureBody extends ConstructToken implements Scope {
 
     private TokenList<LineOfCode> linesOfCode;
@@ -35,7 +37,6 @@ public class ClosureBody extends ConstructToken implements Scope {
 
     @Override
     public void addParameters(TokenList<VariableDeclaration> parameters) {
-        // TODO
         parameters.getTokenList().forEach(parameter -> {
             try {
                 VariableRegistry.add(parameter, this);
@@ -50,5 +51,10 @@ public class ClosureBody extends ConstructToken implements Scope {
     @Override
     public String toString() {
         return "{ " + linesOfCode.toString() + " }";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(("{ " + linesOfCode.toString() + " }"));
     }
 }

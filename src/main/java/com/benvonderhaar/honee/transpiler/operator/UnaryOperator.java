@@ -77,6 +77,6 @@ public class UnaryOperator extends Operator implements Lexable {
 
     @Override
     public String getRegex() {
-        return "^(\\-\\-)|(\\+\\+)";
+        return "^(\\-\\-)|^(\\+\\+)";
     }
 }
