@@ -8,6 +8,7 @@ import com.benvonderhaar.honee.transpiler.expression.Expression;
 import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
 import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.keyword.ClassKeyword;
+import com.benvonderhaar.honee.transpiler.keyword.NewKeyword;
 import com.benvonderhaar.honee.transpiler.keyword.StaticKeyword;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
@@ -53,6 +54,7 @@ public class TokenTypesUtil {
     public static final AssignmentStatement ASSIGNMENT_STATEMENT = new AssignmentStatement("");
     public static final VariableDeclaration VARIABLE_DECLARATION = new VariableDeclaration("");
     public static final TokenList<VariableDeclaration> LIST_OF_VARIABLE_DECLARATIONS = new TokenList<>(VARIABLE_DECLARATION);
+    public static final TokenList<AnyExpression> LIST_OF_EXPRESSIONS = new TokenList<>(ANY_EXPRESSION);
 
     public static final BinaryOperator ANY_BINARY_OPERATOR = new BinaryOperator("");
     public static final BinaryOperator MINUS_BINARY_OPERATOR = new BinaryOperator("-");
@@ -62,6 +64,7 @@ public class TokenTypesUtil {
 
     public static final StaticKeyword STATIC = new StaticKeyword("");
     public static final ClassKeyword CLASS = new ClassKeyword("");
+    public static final NewKeyword NEW_KEYWORD = new NewKeyword();
 
     public static final FunctionConstruct FUNCTION = new FunctionConstruct("");
     public static final ClassBodyConstructToken CLASS_BODY_CONSTRUCT_TOKEN = new ClassBodyConstructToken();

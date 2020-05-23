@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.*;
 
-public class FoldVariableIntoVariablesReducer implements Reducer {
+public class FoldVariableDeclarationIntoVariableDeclarationsReducer implements Reducer {
 
     @Override
     public Token reduce(Token[] tokens, List<Token> tokenTypes) {

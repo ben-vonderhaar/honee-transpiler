@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.util;
 
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
+import com.benvonderhaar.honee.transpiler.reducer.ClassInstanceDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.reducer.VariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.reducer.clazz.ClassConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpressionReducer;
@@ -11,6 +12,10 @@ import com.benvonderhaar.honee.transpiler.reducer.expression.PreUnaryOperationEx
 import com.benvonderhaar.honee.transpiler.reducer.function.ConstructorConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.MultiLineClosureBodyReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.closurebody.SingleLineClosureBodyReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.constructor.MultiParameterObjectInstantiationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.constructor.NoParameterObjectInstantiationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.constructor.SingleParameterObjectInstantiationExpressionReducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.constructor.TwoExpressionReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.function.FoldClassBodyConstructIntoClassBodyConstructsReducer;
 import com.benvonderhaar.honee.transpiler.reducer.function.FunctionConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.listable.function.SingleClassBodyConstructClassReducer;
@@ -38,11 +43,15 @@ public class ReducerUtil {
             = new ParenthesisExpressionReducer();
     public static final VariableDeclarationReducer VARIABLE_DECLARATION_REDUCER
             = new VariableDeclarationReducer();
+    public static final ClassInstanceDeclarationReducer CLASS_INSTANCE_DECLARATION_REDUCER
+            = new ClassInstanceDeclarationReducer();
 
     public static final AssignmentLineOfCodeReducer ASSIGNMENT_LINE_OF_CODE_REDUCER
             = new AssignmentLineOfCodeReducer();
     public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
             = new ExpressionLineOfCodeReducer();
+    public static final TwoExpressionReducer TWO_EXPRESSION_REDUCER
+            = new TwoExpressionReducer();
 
     public static final NoParameterFunctionDeclarationReducer NO_PARAMETER_FUNCTION_DECLARATION_REDUCER
             = new NoParameterFunctionDeclarationReducer();
@@ -52,8 +61,8 @@ public class ReducerUtil {
             = new MultiParameterFunctionDeclarationReducer();
     public static final TwoVariableDeclarationReducer TWO_VARIABLE_DECLARATION_REDUCER
             = new TwoVariableDeclarationReducer();
-    public static final FoldVariableIntoVariablesReducer FOLD_VARIABLE_INTO_VARIABLES_REDUCER
-            = new FoldVariableIntoVariablesReducer();
+    public static final FoldVariableDeclarationIntoVariableDeclarationsReducer FOLD_VARIABLE_INTO_VARIABLES_REDUCER
+            = new FoldVariableDeclarationIntoVariableDeclarationsReducer();
 
     public static final TwoLinesOfCodeReducer TWO_LINES_OF_CODE_REDUCER
             = new TwoLinesOfCodeReducer();
@@ -74,6 +83,13 @@ public class ReducerUtil {
             = new SingleClassBodyConstructClassReducer();
     public static final FoldClassBodyConstructIntoClassBodyConstructsReducer FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER
             = new FoldClassBodyConstructIntoClassBodyConstructsReducer();
+
+    public static final NoParameterObjectInstantiationExpressionReducer NO_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
+            = new NoParameterObjectInstantiationExpressionReducer();
+    public static final SingleParameterObjectInstantiationExpressionReducer SINGLE_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
+            = new SingleParameterObjectInstantiationExpressionReducer();
+    public static final MultiParameterObjectInstantiationExpressionReducer MULTI_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
+            = new MultiParameterObjectInstantiationExpressionReducer();
 
     public static boolean matchesTokenListType(Class<? extends Token> tokenType, Token token) {
 

@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.Scope;
+import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 
 public class LiteralExpression extends Expression implements Lexable {
@@ -10,6 +11,8 @@ public class LiteralExpression extends Expression implements Lexable {
 
 	public LiteralExpression(String literalExpression) {
 
+		// TODO this needs to be type-aware in the future
+		this.literal = new IntegerLiteral(literalExpression);
 	}
 
 	public LiteralExpression(Literal literal) {

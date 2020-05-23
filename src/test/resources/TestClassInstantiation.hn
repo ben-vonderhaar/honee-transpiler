@@ -1,0 +1,11 @@
+public class Test2 {
+
+    testInstantiateClass() {
+
+        Test test = new Test();
+        Test test1 = new Test(4);
+        Test test2 = new Test(4, 5);
+
+    }
+
+}

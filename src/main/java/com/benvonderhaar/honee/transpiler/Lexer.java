@@ -9,11 +9,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.benvonderhaar.honee.transpiler.construct.OptionalToken;
+import com.benvonderhaar.honee.transpiler.construct.TokenList;
 import com.benvonderhaar.honee.transpiler.expression.*;
 import com.benvonderhaar.honee.transpiler.keyword.*;
 import com.benvonderhaar.honee.transpiler.literal.*;
 import com.benvonderhaar.honee.transpiler.operator.*;
 import com.benvonderhaar.honee.transpiler.reducer.Reducer;
+import com.benvonderhaar.honee.transpiler.reducer.listable.functiondeclaration.MultiParameterFunctionDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.registry.LexableTokenTypeRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
@@ -51,6 +53,7 @@ public class Lexer {
 		tokenTypes.add(AccessModifier.class);
 		tokenTypes.add(StaticKeyword.class);
 		tokenTypes.add(ClassKeyword.class);
+		tokenTypes.add(NewKeyword.class);
 
 		tokenTypes.add(VariableExpression.class);
 
@@ -142,7 +145,7 @@ public class Lexer {
 				}
 			}
 
-			if (!foundToken) {
+			if (!foundToken && !honeeCodeInput.isEmpty()) {
 				throw new HoneeException("Could not match next token, remaining line: " + honeeCodeInput);
 			}
 
@@ -200,14 +203,6 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead, PARENTHESIS_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced Parenthesis");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
 			if (reduce(parserStack, lookahead, TWO_EQUALS_TO_DOUBLE_EQUALS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced BINOP ==");
@@ -234,6 +229,14 @@ public class Lexer {
 				continue;
 			}
 
+			if (reduce(parserStack, lookahead, CLASS_INSTANCE_DECLARATION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced Variable Declaration (class instance)");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
 			if (reduce(parserStack, lookahead, ASSIGNMENT_LINE_OF_CODE_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced Assignment LOC");
@@ -242,11 +245,24 @@ public class Lexer {
 				continue;
 			}
 
-			if (reduce(parserStack, lookahead, EXPRESSION_LINE_OF_CODE_REDUCER).bool()) {
+			if (reduce(parserStack, lookahead, NO_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
 				didReduction = true;
-				System.out.println("Reduced expression LOC");
+				System.out.println("Reduced to object instance");
 				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, SINGLE_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced to object instance");
+				System.out.println("Parser Stack: " + parserStack);
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, MULTI_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced to object instance");
+				System.out.println("Parser Stack: " + parserStack);
 				continue;
 			}
 
@@ -290,6 +306,14 @@ public class Lexer {
 				continue;
 			}
 
+			if (reduce(parserStack, lookahead, EXPRESSION_LINE_OF_CODE_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced expression LOC");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
 			if (reduce(parserStack, lookahead, SINGLE_LINE_CLOSURE_BODY_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Reduced single LOC closure body");
@@ -325,6 +349,22 @@ public class Lexer {
 			if (reduce(parserStack, lookahead, FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER).bool()) {
 				didReduction = true;
 				System.out.println("Folded class body construct into existing class body constructs");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, PARENTHESIS_EXPRESSION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced Parenthesis");
+				System.out.println("Parser Stack: " + parserStack);
+				System.out.println();
+				continue;
+			}
+
+			if (reduce(parserStack, lookahead, TWO_EXPRESSION_REDUCER).bool()) {
+				didReduction = true;
+				System.out.println("Reduced two expressions to list of expression");
 				System.out.println("Parser Stack: " + parserStack);
 				System.out.println();
 				continue;
@@ -439,7 +479,14 @@ public class Lexer {
 										((OptionalToken<? extends Token>) tokenTypesOption.get(j)).getMaterializedToken().getClass() :
 										tokenTypesOption.get(j).getClass();
 
-								if (!materializedTokenClass.isAssignableFrom(stack.get(i + j).getClass())) {
+								boolean tokenIsList = tokenIsOfType(tokenTypesOption.get(j), TokenList.class);
+								Class<? extends Token> materializedTokenListClass = tokenIsList ?
+										((TokenList<? extends Token>) tokenTypesOption.get(j)).getListType() :
+										materializedTokenClass;
+
+								if (!materializedTokenClass.isAssignableFrom(stack.get(i + j).getClass())
+									|| (tokenIsList && !materializedTokenListClass.isAssignableFrom(
+										((TokenList<? extends Token>) stack.get(i + j)).getListType()))) {
 									matchedAllTokens = false;
 									break;
 								}

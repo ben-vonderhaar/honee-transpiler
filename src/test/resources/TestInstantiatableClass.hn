@@ -8,4 +8,8 @@ public class Test {
         integer b = a;
     }
 
+    (integer a, integer b) {
+        integer c = a + b;
+    }
+
 }

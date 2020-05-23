@@ -4,6 +4,7 @@ import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +18,15 @@ public class LexableTokenTypeRegistry {
         Lexable lexableToken = tokenTypeToTokenMap.get(tokenType);
 
         if (null == lexableToken) {
+
             try {
-                // Forces all tokens to implement a constructor that takes a single object
-                // TODO remove this restriction
-                lexableToken = (Lexable) tokenType.getConstructors()[0].newInstance((Object) null);
+                lexableToken = (Lexable) tokenType.getConstructor().newInstance();
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new HoneeException("Unable to register the following token type: " + tokenType.getName());
+                try {
+                    lexableToken = (Lexable) tokenType.getConstructor(String.class).newInstance("");
+                } catch (Exception e2) {
+                    throw new HoneeException("Unable to register the following token type: " + tokenType.getName());
+                }
             }
 
             tokenTypeToTokenMap.put(tokenType, lexableToken);
@@ -39,11 +42,13 @@ public class LexableTokenTypeRegistry {
         if (null == lexableToken) {
 
             try {
-                // Forces all tokens to implement a constructor that takes a single object
-                // TODO remove this restriction
-                lexableToken = (Lexable) tokenType.getConstructors()[0].newInstance("");
+                lexableToken = (Lexable) tokenType.getConstructor().newInstance();
             } catch (Exception e) {
-                return false;
+                try {
+                    lexableToken = (Lexable) tokenType.getConstructor(String.class).newInstance("");
+                } catch (Exception e2) {
+                    return false;
+                }
             }
 
             tokenTypeToTokenMap.put(tokenType, lexableToken);

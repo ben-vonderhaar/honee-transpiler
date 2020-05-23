@@ -28,12 +28,21 @@ public class TestClassInstantiation {
     }
 
     @Test
-    public void testInstantiateClassWithNoParameterConstructor() throws Throwable {
+    public void testInstantiateClassWithSeveralParameterOptionConstructors() throws Throwable {
 
-        ClosureBody testClass = (ClosureBody) VariableRegistry.getScope(
-                "Test", "class");
+        BufferedReader reader2 = new BufferedReader(new FileReader("src/test/resources/TestClassInstantiation.hn"));
 
-        System.out.println(testClass);
+        String fileContents = reader2.lines()
+                .collect(Collectors.joining("\n"));
+
+        Lexer.processHnFileContents(fileContents);
+
+        ClosureBody testFunction = (ClosureBody) VariableRegistry.getScope(
+                "testInstantiateClass", "function");
+
+        //System.out.println(testFunction);
+
+        reader2.close();
     }
 
     @After

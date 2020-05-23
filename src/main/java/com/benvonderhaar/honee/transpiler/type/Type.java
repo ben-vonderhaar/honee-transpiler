@@ -5,8 +5,10 @@ import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
 public class Type extends AnyType implements Lexable {
 
-	public Type(String type) {
+	protected String name;
 
+	public Type(String name) {
+		this.name = name;
 	}
 
 	public static Class<? extends Type> getType(String type) throws HoneeException {
