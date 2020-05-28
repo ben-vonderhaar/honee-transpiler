@@ -2,6 +2,7 @@ package com.benvonderhaar.honee.transpiler.expression;
 
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
+import com.benvonderhaar.honee.transpiler.type.Type;
 
 import java.util.List;
 
@@ -23,6 +24,11 @@ public class ObjectInstantiationExpression extends Expression {
     @Override
     public Literal evaluate() {
         return null;
+    }
+
+    @Override
+    public Class<? extends Type> getEvaluatedType() {
+        return className.getEvaluatedType();
     }
 
     @Override

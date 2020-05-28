@@ -5,6 +5,8 @@ import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.symbol.LParen;
 import com.benvonderhaar.honee.transpiler.symbol.RParen;
+import com.benvonderhaar.honee.transpiler.type.BooleanType;
+import com.benvonderhaar.honee.transpiler.type.Type;
 
 import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
@@ -21,6 +23,10 @@ public class ParenthesisExpression extends Expression {
 		return expression.evaluate();
 	}
 
+	@Override
+	public Class<? extends Type> getEvaluatedType() {
+		return this.expression.getEvaluatedType();
+	}
 	@Override
 	public String toString() {
 		return "(" + this.expression.toString() + ")";

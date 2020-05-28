@@ -18,6 +18,8 @@ import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.statement.AssignmentStatement;
 import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.AnyType;
+import com.benvonderhaar.honee.transpiler.type.BooleanType;
+import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.type.VariableType;
 
 import java.util.*;
@@ -44,6 +46,11 @@ public class TokenTypesUtil {
     public static final Expression EXPRESSION = new Expression() {
         @Override
         public Literal evaluate() {
+            return null;
+        }
+
+        @Override
+        public Class<? extends Type> getEvaluatedType() {
             return null;
         }
     };

@@ -7,6 +7,8 @@ import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.UnaryOperator;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
 import com.benvonderhaar.honee.transpiler.symbol.Variable;
+import com.benvonderhaar.honee.transpiler.type.BooleanType;
+import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.type.VariableType;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
 
@@ -53,6 +55,11 @@ public class UnaryOperationExpression extends Expression {
             return valueToBeUsed;
         }
 
+    }
+
+    @Override
+    public Class<? extends Type> getEvaluatedType() {
+        return this.exp.getEvaluatedType();
     }
 
     @Override

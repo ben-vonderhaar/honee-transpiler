@@ -13,16 +13,12 @@ public class ClosureBody extends ConstructToken implements Scope {
 
     public ClosureBody(LineOfCode lineOfCode) {
         this.linesOfCode = new TokenList<>(lineOfCode);
-        this.stringRepresentation = "{ " + linesOfCode.toString() + " }";
+        this.stringRepresentation = "{ " + this.linesOfCode.toString() + " }";
     }
 
     public ClosureBody(TokenList<LineOfCode> linesOfCode) {
         this.linesOfCode = linesOfCode;
-        this.stringRepresentation = "{ " + linesOfCode.toString() + " }";
-    }
-
-    public TokenList<LineOfCode> getLinesOfCode() {
-        return this.linesOfCode;
+        this.stringRepresentation = "{ " + this.linesOfCode.toString() + " }";
     }
 
     // TODO make interface evaluateable?

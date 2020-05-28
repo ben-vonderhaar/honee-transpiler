@@ -1,15 +1,13 @@
 package com.benvonderhaar.honee.transpiler.expression;
 
-import com.benvonderhaar.honee.transpiler.Lexable;
 import com.benvonderhaar.honee.transpiler.Scope;
 import com.benvonderhaar.honee.transpiler.Token;
-import com.benvonderhaar.honee.transpiler.construct.ConstructToken;
 import com.benvonderhaar.honee.transpiler.literal.Literal;
 import com.benvonderhaar.honee.transpiler.operator.BinaryOperator;
+import com.benvonderhaar.honee.transpiler.type.BooleanType;
+import com.benvonderhaar.honee.transpiler.type.Type;
 
 import java.util.List;
-
-import static com.benvonderhaar.honee.transpiler.util.TypeCheckUtil.tokenIsOfType;
 
 public class BinaryOperationExpression extends Expression {
 
@@ -38,6 +36,11 @@ public class BinaryOperationExpression extends Expression {
 	@Override
 	public Literal evaluate() {
 		return this.op.evaluate(scope, lhs, rhs);
+	}
+
+	@Override
+	public Class<? extends Type> getEvaluatedType() {
+		return BooleanType.class;
 	}
 
 	@Override

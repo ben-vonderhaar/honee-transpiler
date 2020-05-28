@@ -37,6 +37,6 @@ public class FoldLineOfCodeIntoLinesOfCodeReducer implements Reducer {
 
     @Override
     public String getDebugText() {
-        return "Folded LOC into existing LinesOfCod";
+        return "Folded LOC into existing LinesOfCode";
     }
 }

@@ -66,6 +66,11 @@ public class AssignmentStatement extends Statement implements Scopeable {
 			ex.printStackTrace();
 			System.exit(1);
 		}
+
+		System.out.println(this.variableDeclaration.getType().getClass());
+		System.out.println(this.expression.getEvaluatedType());
+
+		// TODO properly check that the assignment is valid.
 	}
 
 	public Variable getVariable() {
