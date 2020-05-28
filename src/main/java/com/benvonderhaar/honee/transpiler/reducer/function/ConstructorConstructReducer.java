@@ -40,4 +40,14 @@ public class ConstructorConstructReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return ConstructorConstruct.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOW;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced constructor definition";
+    }
 }

@@ -30,4 +30,14 @@ public class PreUnaryOperationExpressionReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return UnaryOperationExpression.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.HIGHEST;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced PRE UNOP Expression";
+    }
 }

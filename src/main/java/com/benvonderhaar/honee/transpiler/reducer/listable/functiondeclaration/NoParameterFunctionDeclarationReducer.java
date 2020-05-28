@@ -33,4 +33,14 @@ public class NoParameterFunctionDeclarationReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return FunctionDeclaration.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.MEDIUM;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced no parameter function declaration";
+    }
 }

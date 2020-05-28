@@ -29,4 +29,14 @@ public class FoldClassBodyConstructIntoClassBodyConstructsReducer implements Red
     public Class<? extends Token> getOutputClass() {
         return TokenList.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOW;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Folded class body construct into existing class body constructs";
+    }
 }

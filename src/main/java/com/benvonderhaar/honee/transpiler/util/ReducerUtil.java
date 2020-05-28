@@ -3,6 +3,7 @@ package com.benvonderhaar.honee.transpiler.util;
 import com.benvonderhaar.honee.transpiler.Token;
 import com.benvonderhaar.honee.transpiler.construct.TokenList;
 import com.benvonderhaar.honee.transpiler.reducer.ClassInstanceDeclarationReducer;
+import com.benvonderhaar.honee.transpiler.reducer.Reducer;
 import com.benvonderhaar.honee.transpiler.reducer.VariableDeclarationReducer;
 import com.benvonderhaar.honee.transpiler.reducer.clazz.ClassConstructReducer;
 import com.benvonderhaar.honee.transpiler.reducer.expression.BinaryOperationExpressionReducer;
@@ -26,70 +27,56 @@ import com.benvonderhaar.honee.transpiler.reducer.loc.*;
 import com.benvonderhaar.honee.transpiler.reducer.operator.MinusSpaceMinusToPlusReducer;
 import com.benvonderhaar.honee.transpiler.reducer.operator.TwoEqualsToDoubleEqualsReducer;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
+
 public class ReducerUtil {
 
-    public static final MinusSpaceMinusToPlusReducer MINUS_SPACE_MINUS_TO_PLUS_REDUCER
-            = new MinusSpaceMinusToPlusReducer();
-    public static final TwoEqualsToDoubleEqualsReducer TWO_EQUALS_TO_DOUBLE_EQUALS_REDUCER
-            = new TwoEqualsToDoubleEqualsReducer();
+    public static List<Reducer> reducers = List.of(
+                new MinusSpaceMinusToPlusReducer(),
+                new TwoEqualsToDoubleEqualsReducer(),
 
-    public static final PreUnaryOperationExpressionReducer PRE_UNARY_OPERATION_EXPRESSION_REDUCER
-            = new PreUnaryOperationExpressionReducer();
-    public static final PostUnaryOperationExpressionReducer POST_UNARY_OPERATION_EXPRESSION_REDUCER
-            = new PostUnaryOperationExpressionReducer();
-    public static final BinaryOperationExpressionReducer BINARY_OPERATION_EXPRESSION_REDUCER
-            = new BinaryOperationExpressionReducer();
-    public static final ParenthesisExpressionReducer PARENTHESIS_EXPRESSION_REDUCER
-            = new ParenthesisExpressionReducer();
-    public static final VariableDeclarationReducer VARIABLE_DECLARATION_REDUCER
-            = new VariableDeclarationReducer();
-    public static final ClassInstanceDeclarationReducer CLASS_INSTANCE_DECLARATION_REDUCER
-            = new ClassInstanceDeclarationReducer();
+                new PreUnaryOperationExpressionReducer(),
+                new PostUnaryOperationExpressionReducer(),
+                new BinaryOperationExpressionReducer(),
+                new ParenthesisExpressionReducer(),
+                new VariableDeclarationReducer(),
+                new ClassInstanceDeclarationReducer(),
 
-    public static final AssignmentLineOfCodeReducer ASSIGNMENT_LINE_OF_CODE_REDUCER
-            = new AssignmentLineOfCodeReducer();
-    public static final ExpressionLineOfCodeReducer EXPRESSION_LINE_OF_CODE_REDUCER
-            = new ExpressionLineOfCodeReducer();
-    public static final TwoExpressionReducer TWO_EXPRESSION_REDUCER
-            = new TwoExpressionReducer();
+                new AssignmentLineOfCodeReducer(),
+                new ExpressionLineOfCodeReducer(),
+                new TwoExpressionReducer(),
 
-    public static final NoParameterFunctionDeclarationReducer NO_PARAMETER_FUNCTION_DECLARATION_REDUCER
-            = new NoParameterFunctionDeclarationReducer();
-    public static final SingleParameterFunctionDeclarationReducer SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER
-            = new SingleParameterFunctionDeclarationReducer();
-    public static final MultiParameterFunctionDeclarationReducer MULTI_PARAMETER_FUNCTION_DECLARATION_REDUCER
-            = new MultiParameterFunctionDeclarationReducer();
-    public static final TwoVariableDeclarationReducer TWO_VARIABLE_DECLARATION_REDUCER
-            = new TwoVariableDeclarationReducer();
-    public static final FoldVariableDeclarationIntoVariableDeclarationsReducer FOLD_VARIABLE_INTO_VARIABLES_REDUCER
-            = new FoldVariableDeclarationIntoVariableDeclarationsReducer();
+                new NoParameterFunctionDeclarationReducer(),
+                new SingleParameterFunctionDeclarationReducer(),
+                new MultiParameterFunctionDeclarationReducer(),
+                new TwoVariableDeclarationReducer(),
+                new FoldVariableDeclarationIntoVariableDeclarationsReducer(),
 
-    public static final TwoLinesOfCodeReducer TWO_LINES_OF_CODE_REDUCER
-            = new TwoLinesOfCodeReducer();
-    public static final FoldLineOfCodeIntoLinesOfCodeReducer FOLD_LINE_OF_CODE_INTO_LINES_OF_CODE_REDUCER
-            = new FoldLineOfCodeIntoLinesOfCodeReducer();
-    public static final SingleLineClosureBodyReducer SINGLE_LINE_CLOSURE_BODY_REDUCER
-            = new SingleLineClosureBodyReducer();
-    public static final MultiLineClosureBodyReducer MULTI_LINE_CLOSURE_BODY_REDUCER
-            = new MultiLineClosureBodyReducer();
+                new TwoLinesOfCodeReducer(),
+                new FoldLineOfCodeIntoLinesOfCodeReducer(),
+                new SingleLineClosureBodyReducer(),
+                new MultiLineClosureBodyReducer(),
 
-    public static final ClassConstructReducer CLASS_CONSTRUCT_REDUCER
-            = new ClassConstructReducer();
-    public static final FunctionConstructReducer FUNCTION_CONSTRUCT_REDUCER
-            = new FunctionConstructReducer();
-    public static final ConstructorConstructReducer CONSTRUCTOR_CONSTRUCT_REDUCER
-            = new ConstructorConstructReducer();
-    public static final SingleClassBodyConstructClassReducer SINGLE_CLASS_BODY_CONSTRUCT_CLASS_REDUCER
-            = new SingleClassBodyConstructClassReducer();
-    public static final FoldClassBodyConstructIntoClassBodyConstructsReducer FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER
-            = new FoldClassBodyConstructIntoClassBodyConstructsReducer();
+                new ClassConstructReducer(),
+                new FunctionConstructReducer(),
+                new ConstructorConstructReducer(),
+                new SingleClassBodyConstructClassReducer(),
+                new FoldClassBodyConstructIntoClassBodyConstructsReducer(),
 
-    public static final NoParameterObjectInstantiationExpressionReducer NO_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
-            = new NoParameterObjectInstantiationExpressionReducer();
-    public static final SingleParameterObjectInstantiationExpressionReducer SINGLE_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
-            = new SingleParameterObjectInstantiationExpressionReducer();
-    public static final MultiParameterObjectInstantiationExpressionReducer MULTI_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER
-            = new MultiParameterObjectInstantiationExpressionReducer();
+                new NoParameterObjectInstantiationExpressionReducer(),
+                new SingleParameterObjectInstantiationExpressionReducer(),
+                new MultiParameterObjectInstantiationExpressionReducer())
+            .stream()
+            .sorted(Comparator.comparingInt(Reducer::getPriorityValue).reversed())
+            .collect(Collectors.toList());
+
+    public static ListIterator<Reducer> getReducers() {
+        return reducers.listIterator();
+    }
+
 
     public static boolean matchesTokenListType(Class<? extends Token> tokenType, Token token) {
 

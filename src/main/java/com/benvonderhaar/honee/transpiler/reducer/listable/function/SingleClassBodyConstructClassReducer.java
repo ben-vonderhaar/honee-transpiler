@@ -27,4 +27,14 @@ public class SingleClassBodyConstructClassReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return TokenList.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOWEST;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced single function to list of functions";
+    }
 }

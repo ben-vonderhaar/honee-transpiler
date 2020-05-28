@@ -24,4 +24,14 @@ public class TwoEqualsToDoubleEqualsReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return BinaryOperator.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.HIGHEST;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced BINOP ==";
+    }
 }

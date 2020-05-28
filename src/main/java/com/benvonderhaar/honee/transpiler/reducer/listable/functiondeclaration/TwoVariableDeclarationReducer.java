@@ -28,4 +28,14 @@ public class TwoVariableDeclarationReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return TokenList.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.MEDIUM;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced two variable declarations into tokenlist";
+    }
 }

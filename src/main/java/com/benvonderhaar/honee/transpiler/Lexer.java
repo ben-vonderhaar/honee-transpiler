@@ -3,6 +3,7 @@ package com.benvonderhaar.honee.transpiler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ import com.benvonderhaar.honee.transpiler.symbol.*;
 import com.benvonderhaar.honee.transpiler.type.Type;
 import com.benvonderhaar.honee.transpiler.util.BooleanMatchedTokensArrayTokenTypesArrayTuple;
 import com.benvonderhaar.honee.transpiler.util.HoneeException;
+import com.benvonderhaar.honee.transpiler.util.ReducerUtil;
 import com.benvonderhaar.honee.transpiler.util.TokenTypesAndMatchedTokensTuple;
 
 import static com.benvonderhaar.honee.transpiler.util.ReducerUtil.*;
@@ -177,228 +179,18 @@ public class Lexer {
 
 			didReduction = false;
 
-			// TODO prioritize likely reductions this iteration based on previous reduction (if any)
+			ListIterator<Reducer> reducers = ReducerUtil.getReducers();
 
-			if (reduce(parserStack, lookahead, PRE_UNARY_OPERATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced PRE UNOP Expression");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
+			while (reducers.hasNext()) {
+				Reducer r = reducers.next();
 
-			if (reduce(parserStack, lookahead, POST_UNARY_OPERATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced POST UNOP Expression");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, BINARY_OPERATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced BINOP Expression");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, TWO_EQUALS_TO_DOUBLE_EQUALS_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced BINOP ==");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			// [-, _, -] -> [+]
-			// TODO update to no longer look for separating whitespace, since there is none at this step anymore
-			if (reduce(parserStack, lookahead, MINUS_SPACE_MINUS_TO_PLUS_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced - - -> +");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, VARIABLE_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced Variable Declaration");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, CLASS_INSTANCE_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced Variable Declaration (class instance)");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, ASSIGNMENT_LINE_OF_CODE_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced Assignment LOC");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, NO_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced to object instance");
-				System.out.println("Parser Stack: " + parserStack);
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, SINGLE_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced to object instance");
-				System.out.println("Parser Stack: " + parserStack);
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, MULTI_PARAMETER_OBJECT_INSTANTIATION_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced to object instance");
-				System.out.println("Parser Stack: " + parserStack);
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, NO_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced no parameter function declaration");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, SINGLE_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced single parameter function declaration");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, MULTI_PARAMETER_FUNCTION_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced multiple parameter function declaration");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, TWO_VARIABLE_DECLARATION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced two variable declarations into tokenlist");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, FOLD_VARIABLE_INTO_VARIABLES_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Folded variable into list of variable declarations");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, EXPRESSION_LINE_OF_CODE_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced expression LOC");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, SINGLE_LINE_CLOSURE_BODY_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced single LOC closure body");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, MULTI_LINE_CLOSURE_BODY_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced multiple LOC closure body");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, TWO_LINES_OF_CODE_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced two LOC into LinesOfCode");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, FOLD_LINE_OF_CODE_INTO_LINES_OF_CODE_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Folded LOC into existing LinesOfCode");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, FOLD_CLASS_BODY_CONSTRUCT_INTO_CLASS_BODY_CONSTRUCTS_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Folded class body construct into existing class body constructs");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, PARENTHESIS_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced Parenthesis");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, TWO_EXPRESSION_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced two expressions to list of expression");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, FUNCTION_CONSTRUCT_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced class body construct definition");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, CONSTRUCTOR_CONSTRUCT_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced constructor definition");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, SINGLE_CLASS_BODY_CONSTRUCT_CLASS_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced single function to list of functions");
-				System.out.println("Parser Stack: " + parserStack);
-				System.out.println();
-				continue;
-			}
-
-			if (reduce(parserStack, lookahead, CLASS_CONSTRUCT_REDUCER).bool()) {
-				didReduction = true;
-				System.out.println("Reduced to class");
-				System.out.println("Parser Stack: " + parserStack);
-				continue;
+				if (reduce(parserStack, lookahead, r).bool()) {
+					didReduction = true;
+					System.out.println(r.getDebugText());
+					System.out.println("Parser Stack: " + parserStack);
+					System.out.println();
+					break;
+				}
 			}
 
 		}

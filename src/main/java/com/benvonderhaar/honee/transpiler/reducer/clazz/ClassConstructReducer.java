@@ -45,4 +45,14 @@ public class ClassConstructReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return ClassConstruct.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOWEST;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced to class";
+    }
 }

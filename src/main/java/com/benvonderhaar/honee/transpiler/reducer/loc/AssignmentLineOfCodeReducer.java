@@ -33,4 +33,14 @@ public class AssignmentLineOfCodeReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return LineOfCode.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.HIGH;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced Assignment LOC";
+    }
 }

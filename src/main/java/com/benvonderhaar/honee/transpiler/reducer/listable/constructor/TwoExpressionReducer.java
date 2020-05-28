@@ -29,4 +29,14 @@ public class TwoExpressionReducer implements Reducer {
         return TokenList.class;
     }
 
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOW;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced two expressions to list of expression";
+    }
+
 }

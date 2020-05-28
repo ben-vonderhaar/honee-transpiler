@@ -26,4 +26,14 @@ public class ClassInstanceDeclarationReducer extends VariableDeclarationReducer 
     public Class<? extends Token> getOutputClass() {
         return VariableDeclaration.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.HIGH;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced Variable Declaration (class instance)";
+    }
 }

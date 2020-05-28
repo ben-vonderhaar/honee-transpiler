@@ -43,4 +43,31 @@ public interface Reducer {
         return true;
     }
 
+    default String getDebugText() {
+        return "";
+    }
+
+    default Reducer.Priority getPriority() {
+        return Reducer.Priority.LOWEST;
+    }
+
+    default int getPriorityValue() {
+        return getPriority().value;
+    }
+
+    enum Priority {
+
+        LOWEST(0),
+        LOW(1),
+        MEDIUM(2),
+        HIGH(3),
+        HIGHEST(4);
+
+        private int value;
+
+        Priority(int value) {
+            this.value = value;
+        }
+    }
 }
+

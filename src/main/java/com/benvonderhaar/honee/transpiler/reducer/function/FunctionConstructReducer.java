@@ -50,4 +50,14 @@ public class FunctionConstructReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return FunctionConstruct.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.LOW;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced class body construct definition";
+    }
 }

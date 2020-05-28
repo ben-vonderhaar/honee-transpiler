@@ -31,5 +31,15 @@ public class MultiParameterObjectInstantiationExpressionReducer implements Reduc
         return ObjectInstantiationExpression.class;
     }
 
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.HIGH;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced to object instance";
+    }
+
 }
 

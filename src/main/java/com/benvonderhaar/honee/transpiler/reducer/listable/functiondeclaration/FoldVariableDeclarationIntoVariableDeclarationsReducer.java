@@ -29,4 +29,14 @@ public class FoldVariableDeclarationIntoVariableDeclarationsReducer implements R
     public Class<? extends Token> getOutputClass() {
         return TokenList.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.MEDIUM;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Folded variable into list of variable declarations";
+    }
 }

@@ -25,4 +25,14 @@ public class SingleLineClosureBodyReducer implements Reducer {
     public Class<? extends Token> getOutputClass() {
         return ClosureBody.class;
     }
+
+    @Override
+    public Reducer.Priority getPriority() {
+        return Priority.MEDIUM;
+    }
+
+    @Override
+    public String getDebugText() {
+        return "Reduced single LOC closure body";
+    }
 }
