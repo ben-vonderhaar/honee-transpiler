@@ -1,37 +1,19 @@
 package com.benvonderhaar.honee.transpiler;
 
 import com.benvonderhaar.honee.transpiler.construct.ClosureBody;
-import com.benvonderhaar.honee.transpiler.construct.FunctionConstruct;
-import com.benvonderhaar.honee.transpiler.construct.FunctionDeclaration;
-import com.benvonderhaar.honee.transpiler.expression.VariableExpression;
-import com.benvonderhaar.honee.transpiler.keyword.AccessModifier;
 import com.benvonderhaar.honee.transpiler.literal.IntegerLiteral;
 import com.benvonderhaar.honee.transpiler.registry.VariableRegistry;
-import com.benvonderhaar.honee.transpiler.symbol.Variable;
-import com.benvonderhaar.honee.transpiler.util.HoneeException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.stream.Collectors;
 
 import static com.benvonderhaar.honee.transpiler.util.TokenTypesUtil.VARIABLE_TYPE;
 import static org.junit.Assert.assertEquals;
 
 public class TestFunctionEvaluation {
 
-    BufferedReader reader;
-
     @Before
     public void setup() throws Throwable {
-        reader = new BufferedReader(new FileReader("src/test/resources/TestMethodParameters.hn"));
-
-        String fileContents = reader.lines()
-                .collect(Collectors.joining("\n"));
-
-        Lexer.processHnFileContents(fileContents);
+        HoneeClassLoader.loadHoneeClass("src/test/resources/TestMethodParameters.hn");
     }
 
     @Test
@@ -75,8 +57,4 @@ public class TestFunctionEvaluation {
                 .getVariableValueAsInteger("a", addParametersAndAssignScope).get());
     }
 
-    @After
-    public void teardown() throws Exception {
-        reader.close();
-    }
 }

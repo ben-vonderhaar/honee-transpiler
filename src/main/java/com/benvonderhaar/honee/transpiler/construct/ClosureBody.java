@@ -9,13 +9,16 @@ import java.util.Objects;
 public class ClosureBody extends ConstructToken implements Scope {
 
     private TokenList<LineOfCode> linesOfCode;
+    private String stringRepresentation;
 
     public ClosureBody(LineOfCode lineOfCode) {
-        this.linesOfCode = new TokenList<LineOfCode>(lineOfCode);
+        this.linesOfCode = new TokenList<>(lineOfCode);
+        this.stringRepresentation = "{ " + linesOfCode.toString() + " }";
     }
 
     public ClosureBody(TokenList<LineOfCode> linesOfCode) {
         this.linesOfCode = linesOfCode;
+        this.stringRepresentation = "{ " + linesOfCode.toString() + " }";
     }
 
     public TokenList<LineOfCode> getLinesOfCode() {
@@ -50,11 +53,11 @@ public class ClosureBody extends ConstructToken implements Scope {
 
     @Override
     public String toString() {
-        return "{ " + linesOfCode.toString() + " }";
+        return this.stringRepresentation;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(("{ " + linesOfCode.toString() + " }"));
+        return Objects.hashCode(this.stringRepresentation);
     }
 }
